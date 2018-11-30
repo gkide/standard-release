@@ -1,0 +1,28 @@
+{
+    "name": "@gkide/standard-release",
+    "version": "0.0.1",
+    "description": "Conventional commit, version and changelog.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo todo ..."
+    },
+    "bin": {
+        "standard-release": "./bin/cli.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gkide/standard-release.git"
+    },
+    "keywords": [
+        "conventional-commit",
+        "conventional-version",
+        "conventional-changelog"
+    ],
+    "author": "charlie-wong",
+    "license": "GPL-3.0-or-later",
+    "bugs": {
+        "url": "https://github.com/gkide/standard-release/issues"
+    },
+    "homepage": "https://github.com/gkide/standard-release#readme",
+    "dependencies": {}
+}
