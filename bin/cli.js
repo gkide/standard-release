@@ -2,11 +2,9 @@
 
 'use strict';
 
-const chalk = require('chalk');
+if(process.version.match(/v(\d+)\./)[1] < 6) {
+    console.error('Node v6 or greater is required. standard-release exit.')
+}
+
 const helper = require('../helper');
-
-helper.cmdParser.argv
-
-
-console.log("standard-release %s", __dirname);
-console.log(chalk.blue('Hello world!'));
+helper.standardRelease();

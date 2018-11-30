@@ -1,17 +1,10 @@
-# Logs
+# Logs & local debug
 logs/
 *.log*
-
-# OS
-.DS_Store
+debug.json
 
 # NodeJS & npm
 package-lock.json
-
-# Optional npm cache directory
-.npm
-# Output of 'npm pack'
-*.tgz
 
 # Dependency directories
 node_modules/
