@@ -27,13 +27,28 @@ const devAttr = (function() {
     return getDev;
 })();
 
+const getModule = function(name) {
+    return require(__dirname + '/lib/' + name);
+}
+
+const getGitDir = function() {
+    var gitDir;
+    try {
+        gitDir = getModule('GitRepo').findRepoDir();
+    } catch (err) { }
+
+    return gitDir;
+}
+
 exports.standardRelease = function standardRelease() {
     // Parse cmd-line arguments
-    const usrConfig = require('./lib/cmdparser').argv;
-    
+    const usrConfig = getModule('cmdparser').argv;
+
     if(devAttr('printCmdLineArgs')) {
         console.log(usrConfig)
     }
+
+    const gitRepoDir = getGitDir();
 
     console.log("standard-release %s", chalk.green('OK'));
 }
