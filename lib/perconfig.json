@@ -1,0 +1,12 @@
+{
+    "sign": true,
+    "tagPrefix": "v",
+    "dryRun": false,
+    "silent": false,
+    "noVerify": false,
+    "doCommit": false,
+    "firstRelease": false,
+    "loadChangelog": "CHANGELOG.md",
+    "message": "chore(release): %s",
+    "usrHooks": {}
+}
