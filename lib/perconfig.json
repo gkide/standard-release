@@ -4,7 +4,7 @@
     "dryRun": false,
     "silent": false,
     "noVerify": false,
-    "doCommit": false,
+    "doCommit": true,
     "firstRelease": false,
     "loadChangelog": "CHANGELOG.md",
     "message": "chore(release): %s",
