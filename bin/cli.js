@@ -2,9 +2,11 @@
 
 'use strict';
 
+const path = require('path');
+
 if(process.version.match(/v(\d+)\./)[1] < 6) {
-    console.error('Node v6 or greater is required. standard-release exit.')
+    console.error('Node v6 or greater is required. standard-release exit.');
+    process.exit(1);
 }
 
-const helper = require('../helper');
-helper.standardRelease();
+require(path.join(__dirname, '..', 'helper')).standardRelease();
