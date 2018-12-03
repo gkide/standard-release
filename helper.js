@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const assert = require('assert');
+
 const chalk = require('chalk');
 
 const fixSym = {
@@ -14,7 +15,10 @@ const fixSym = {
 }
 
 const cfgSym = { // internal usr config tag
-    devPrintCmdArgs: Symbol.for('devPrint1'),
+    devPrintCmdArgs: Symbol.for('devPrintCmdArgs'),
+    devPrintCommitRules: Symbol.for('devPrintCommitRules'),
+    usrCfgCommitRules: Symbol.for('usrCfgCommitRules'),
+    defaultCommitRules: Symbol.for('defaultCommitRules'),
 }
 
 const helperSym = { // helper class private attr
@@ -95,8 +99,37 @@ const helper = new class {
         switch(attr) {
             // developer debug attrs
             case cfgSym.devPrintCmdArgs:
-                return this.cfgObj.attr.devPrintCmdArgs;
+                try {
+                    return this.cfgObj.attr.devPrintCmdArgs;
+                } catch(err) {
+                    return false;
+                }
+            case cfgSym.devPrintCommitRules:
+               try {
+                    return this.cfgObj.attr.devPrintCommitRules;
+                } catch(err) {
+                    return false;
+                }
+            // usr configuration data
+            case cfgSym.usrCfgCommitRules:
+               try {
+                    if(this.cfgObj.attr.commitRulesDefault) {
+                        return getModule('cfgInit').commitRules;
+                    }
+                    return this.cfgObj.attr.commitRules;
+                } catch(err) {
+                    const wmsg = 'Config file error, back to the default ones';
+                    helper.warnMsg(wmsg, helper.cmdArgs.silent);
+                    return getModule('cfgInit').commitRules;
+                }
+            case cfgSym.defaultCommitRules:
+               try {
+                    return this.cfgObj.attr.commitRulesDefault;
+                } catch(err) {
+                    return false;
+                }
             default:
+                return false;
         }
     }
 
@@ -212,28 +245,26 @@ const getFileContent = function(filePath) {
     }
 }
 
-const getCommitFrom = function(file) {
+const getCommitFrom = function(msgFile) {
     const gitDir = getGitDir();
-    if(!gitDir || !file) {
+    if(!gitDir || !msgFile) {
         return null;
     }
 
-    file = path.resolve(gitDir, file);
-    let message = getFileContent(file);
-    return (!message) ? null : {
-        message: message,
-        sourceFile: file
-    };
+    msgFile = path.resolve(gitDir, msgFile);
+    let msgData = getFileContent(msgFile);
+    return (!msgData) ? null : { data: msgData, file: msgFile };
 }
 
-const getCommitInfo = function(msgFileOrText) {
+const getCommitMsg = function(msgFileOrText) {
+    const defMsg = { data: msgFileOrText, file: null  };
     if(msgFileOrText !== undefined) {
-        return getCommitFrom(msgFileOrText) || { message: msgFileOrText };
+        return getCommitFrom(msgFileOrText) || defMsg;
     }
-    return getCommitFrom('COMMIT_EDITMSG') || { message: null };
+    return getCommitFrom('COMMIT_EDITMSG') || defMsg;
 }
 
-const cfgInit = function(repoPath) {
+const cfgInitHome = function(repoPath) {
     const prjDir = path.resolve(process.cwd(), repoPath);
     try { // check if it exist & has write permission
         fs.accessSync(prjDir);
@@ -258,7 +289,8 @@ const cfgInit = function(repoPath) {
     }
 
     helper.usrHome = usrHome;
-    getModule('cfgInit').cfgInit(helper);
+    getModule('cfgInit').usrHome(helper);
+    process.exit(0);
 }
 
 exports.standardRelease = function standardRelease() {
@@ -271,18 +303,24 @@ exports.standardRelease = function standardRelease() {
     helper.usrHome = getUsrHome();
 
     if(cmdArgs.init == '' || cmdArgs.init != '$PWD') {
-        cfgInit(cmdArgs.init); // project repo path
+        cfgInitHome(cmdArgs.init); // project repo path
     }
 
     if(helper.getUsrConfig(cfgSym.devPrintCmdArgs)) {
         console.debug(cmdArgs);
     }
 
+    if(helper.getUsrConfig(cfgSym.devPrintCommitRules)) {
+        console.debug(helper.getUsrConfig(cfgSym.usrCfgCommitRules));
+    }
+
+    console.debug(helper.getUsrConfig(cfgSym.defaultCommitRules));
+
     if(cmdArgs.validate) {
-        let commitInfo = getCommitInfo(cmdArgs.validate);
+        let commitMsg = getCommitMsg(cmdArgs.validate);
         const validateMsg = getModule('validateMsg').validateMsg;
-        if(!validateMsg(commitInfo.message, commitInfo.sourceFile)) {
-            runtimeLogs('validateMsg', commitInfo.message);
+        if(!validateMsg(helper, commitMsg.data, commitMsg.file)) {
+            runtimeLogs('validateMsg', commitMsg.data);
             process.exit(1);
         }
         process.exit(0);
