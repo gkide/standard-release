@@ -222,13 +222,22 @@ const getFileContent = function(filePath) {
 }
 
 const getCommitFrom = function(msgFile) {
-    const gitDir = getGitDir();
-    if(!gitDir || !msgFile) {
+    if(!msgFile) {
         return null;
     }
 
-    msgFile = path.resolve(gitDir, msgFile);
+    msgFile = path.resolve(process.cwd(), msgFile);
     let msgData = getFileContent(msgFile);
+
+    if(!msgData) {
+        const gitDir = getGitDir();
+        if(!gitDir) {
+            return null;
+        }
+        msgFile = path.resolve(gitDir, msgFile);
+        msgData = getFileContent(msgFile);
+    }
+
     return (!msgData) ? null : { data: msgData, file: msgFile };
 }
 
@@ -270,7 +279,6 @@ const cfgInitHome = function(repoPath) {
 }
 
 exports.standardRelease = function standardRelease() {
-    // Parse cmd-line arguments
     const cmdArgs = getModule('cmdParser').argv;
     // console.debug(cmdArgs);
 
@@ -283,10 +291,10 @@ exports.standardRelease = function standardRelease() {
         cfgInitHome(cmdArgs.init); // project repo path
     }
 
-    console.debug(helper.getUsrConfig(cfgSym.usrCfgCommitRules));
+    //console.debug(helper.getUsrConfig(cfgSym.usrCfgCommitRules));
 
-    if(cmdArgs.validate) {
-        let commitMsg = getCommitMsg(cmdArgs.validate);
+    if(cmdArgs.message) {
+        let commitMsg = getCommitMsg(cmdArgs.message);
         const validateMsg = getModule('validateMsg').validateMsg;
         if(!validateMsg(helper, commitMsg.data, commitMsg.file)) {
             runtimeLogs('validateMsg', commitMsg.data);
