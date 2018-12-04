@@ -8,7 +8,6 @@ const assert = require('assert');
 const chalk = require('chalk');
 
 const fixSym = {
-    envCfg: "STANDARD_RELEASE_CONFIG_FILE",
     rtmLog: "logs",
     cfgFile: "config.js",
     usrHome: ".standard-release",
@@ -122,20 +121,13 @@ const helper = new class {
             return this[helperSym.findUsrCfgAttr](attr);
         }
 
-        let cfgFile
-        const defVal = path.join('$PWD', '.standard-release', 'config.js');
-        if(this.cmdArgs.configFile != defVal) { // cmd line first if not default
-            cfgFile = this.cmdArgs.configFile;
-        } else {
-            cfgFile = process.env[fixSym.envCfg] // env is set?
-                      || path.join(getUsrHome(), fixSym.cfgFile);
-        }
+        const cfgFile = path.join(getUsrHome(), fixSym.cfgFile);
 
         try {
             fs.accessSync(cfgFile, fs.constants.R_OK);
             this.cfgObj = require(cfgFile);
         } catch(err) {
-            const wmsg = "'" + cfgFile + "' not exist or '$" + fixSym.envCfg + "' invalid"
+            const wmsg =  "File not exist '" + cfgFile + "'";
             helper.warnMsg(wmsg, helper.cmdArgs.silent);
         }
 
@@ -182,7 +174,7 @@ const getModule = function(name) {
 }
 
 const getGitDir = function() {
-    let gitDir;
+    let gitDir = null;
     try {
         gitDir = getModule('gitRepo').findRepoDir();
     } catch(err) {
