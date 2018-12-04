@@ -15,8 +15,6 @@ const fixSym = {
 }
 
 const cfgSym = { // internal usr config tag
-    devPrintCmdArgs: Symbol.for('devPrintCmdArgs'),
-    devPrintCommitRules: Symbol.for('devPrintCommitRules'),
     usrCfgCommitRules: Symbol.for('usrCfgCommitRules'),
     defaultCommitRules: Symbol.for('defaultCommitRules'),
 }
@@ -97,20 +95,6 @@ const helper = new class {
         }
 
         switch(attr) {
-            // developer debug attrs
-            case cfgSym.devPrintCmdArgs:
-                try {
-                    return this.cfgObj.attr.devPrintCmdArgs;
-                } catch(err) {
-                    return false;
-                }
-            case cfgSym.devPrintCommitRules:
-               try {
-                    return this.cfgObj.attr.devPrintCommitRules;
-                } catch(err) {
-                    return false;
-                }
-            // usr configuration data
             case cfgSym.usrCfgCommitRules:
                try {
                     if(this.cfgObj.attr.commitRulesDefault) {
@@ -296,6 +280,7 @@ const cfgInitHome = function(repoPath) {
 exports.standardRelease = function standardRelease() {
     // Parse cmd-line arguments
     const cmdArgs = getModule('cmdParser').argv;
+    // console.debug(cmdArgs);
 
     helper.fixSym = fixSym;
     helper.cfgSym = cfgSym;
@@ -306,15 +291,7 @@ exports.standardRelease = function standardRelease() {
         cfgInitHome(cmdArgs.init); // project repo path
     }
 
-    if(helper.getUsrConfig(cfgSym.devPrintCmdArgs)) {
-        console.debug(cmdArgs);
-    }
-
-    if(helper.getUsrConfig(cfgSym.devPrintCommitRules)) {
-        console.debug(helper.getUsrConfig(cfgSym.usrCfgCommitRules));
-    }
-
-    console.debug(helper.getUsrConfig(cfgSym.defaultCommitRules));
+    console.debug(helper.getUsrConfig(cfgSym.usrCfgCommitRules));
 
     if(cmdArgs.validate) {
         let commitMsg = getCommitMsg(cmdArgs.validate);
