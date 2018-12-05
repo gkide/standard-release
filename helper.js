@@ -28,20 +28,20 @@ const helperSym = { // helper class private attr
 }
 
 const helper = new class {
-    logMsg(msg, skip=false) { // stdout
-        if(!skip) {
+    logMsg(msg) { // stdout
+        if(!this.cmdArgs.silent) {
             console.log("%s: %s", chalk.blue('LOG'), msg);
         }
     }
 
-    infoMsg(msg, skip=false) { // stdout
-        if(!skip) {
+    infoMsg(msg) { // stdout
+        if(!this.cmdArgs.silent) {
             console.info("%s: %s", chalk.green('INFO'), msg);
         }
     }
 
-    warnMsg(msg, skip=false) { // stderr
-        if(!skip) {
+    warnMsg(msg) { // stderr
+        if(!this.cmdArgs.silent) {
             console.warn("%s: %s", chalk.yellow('WARN'), msg);
         }
     }
@@ -101,8 +101,7 @@ const helper = new class {
                     }
                     return this.cfgObj.attr.commitRules;
                 } catch(err) {
-                    const wmsg = 'Config file error, back to the default ones';
-                    helper.warnMsg(wmsg, helper.cmdArgs.silent);
+                    helper.warnMsg('Config file error, back to the default ones');
                     return getModule('cfgInit').commitRules;
                 }
             case cfgSym.defaultCommitRules:
@@ -127,8 +126,7 @@ const helper = new class {
             fs.accessSync(cfgFile, fs.constants.R_OK);
             this.cfgObj = require(cfgFile);
         } catch(err) {
-            const wmsg =  "File not exist '" + cfgFile + "'";
-            helper.warnMsg(wmsg, helper.cmdArgs.silent);
+            helper.warnMsg("File not exist '" + cfgFile + "'");
         }
 
         this[helperSym.initUsrCfg] = true;
