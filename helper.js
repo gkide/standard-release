@@ -28,6 +28,54 @@ const helperSym = { // helper class private attr
 }
 
 const helper = new class {
+    colorKeys(color, arrData) {
+        let objs = false;
+        for(let key in arrData) {
+            if(objs) {
+                objs = objs + ', ' + chalk[color](key);
+            } else {
+                objs = chalk[color](key);
+            }
+        }
+        return objs;
+    }
+
+    hasUpper(str) {
+        return /[A-Z]/.test(str);
+    }
+
+    isAllUpper(str) {
+        return str === str.toUpperCase();
+    }
+
+    isCharUpper(ch) {
+        return ch >= 'A' && ch <= 'Z';
+    }
+
+    hasLower(str) {
+        return /[a-z]/g.test(str);
+    }
+
+    isAllLower(str) {
+        return str === str.toLowerCase();
+    }
+
+    isCharLower(ch) {
+        return ch >= 'a' && ch <= 'z';
+    }
+
+    upperCaseFirst(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    lowerCaseFirst(str) {
+        return str.charAt(0).toLowerCase() + str.slice(1);
+    }
+
+    hasNoWhiteSpace(str) {
+        return /(\s*)/g.test(str);
+    }
+
     logMsg(msg) { // stdout
         if(!this.cmdArgs.silent) {
             console.log("%s: %s", chalk.blue('LOG'), msg);
@@ -113,6 +161,10 @@ const helper = new class {
             default:
                 return false;
         }
+    }
+
+    isDefautConfig() {
+        return this.getUsrConfig(cfgSym.defaultCommitRules);
     }
 
     getUsrConfig(attr) {
@@ -293,8 +345,6 @@ exports.standardRelease = function standardRelease() {
         cfgInitHome(cmdArgs.init); // project repo path
     }
 
-    //console.debug(helper.getUsrConfig(cfgSym.usrCfgCommitRules));
-
     if(cmdArgs.message) {
         let commitMsg = getCommitMsg(cmdArgs.message);
         const validateMsg = getModule('validateMsg').validateMsg;
@@ -302,8 +352,8 @@ exports.standardRelease = function standardRelease() {
             runtimeLogs('validateMsg', commitMsg.data);
             process.exit(1);
         }
-        process.exit(0);
     }
 
     console.log("standard-release %s", chalk.green('OK'));
+    process.exit(0);
 }
