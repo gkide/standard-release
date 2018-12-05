@@ -200,7 +200,11 @@ const getUsrHome = function() {
 
 const runtimeLogs = function(cmd, msg) {
     let rtmLogFile = path.join(getUsrHome(), fixSym.rtmLog);
-    fs.appendFileSync(rtmLogFile, cmd + ': ' + msg + '\n');
+    try {
+        fs.appendFileSync(rtmLogFile, cmd + ': ' + msg + '\n');
+    } catch(err) {
+        // error do nothing
+    }
 }
 
 const bufferToString = function(buffer) {
