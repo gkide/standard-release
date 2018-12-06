@@ -253,6 +253,12 @@ exports.standardRelease = function standardRelease() {
         }
     }
 
+    if(cmdArgs.first) {
+        if(!tools.getModule('first').doFirstRelease(helper)) {
+            helper.errorMsg('first release error, exit.');
+        }
+    }
+
     console.log("standard-release %s", chalk.green('OK'));
     process.exit(0);
 }
