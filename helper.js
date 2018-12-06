@@ -30,9 +30,9 @@ const helperSym = { // helper class private attr
 }
 
 const helper = new class {
-    colorKeys(color, arrData) {
+    colorKeys(color, obj) {
         let objs = false;
-        for(let key in arrData) {
+        for(let key in obj) {
             if(objs) {
                 objs = objs + ', ' + chalk[color](key);
             } else {
