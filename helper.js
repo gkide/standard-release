@@ -7,6 +7,8 @@ const assert = require('assert');
 
 const chalk = require('chalk');
 
+const tools = require(path.join(__dirname, 'lib', 'tools'));
+
 const fixSym = {
     rtmLog: "logs",
     cfgFile: "config.js",
@@ -109,6 +111,10 @@ const helper = new class {
         }
     }
 
+    runtimeLogs(cmd, msg) {
+        tools.runtimeLogs(cmd, msg, fixSym.usrHome, fixSym.rtmLog);
+    }
+
     tryCreate(fullPath, existCallback, initData, dataType=null) {
         try {
             fs.accessSync(fullPath, fs.constants.R_OK | fs.constants.W_OK);
@@ -153,12 +159,12 @@ const helper = new class {
             case cfgSym.usrCfgCommitRules:
                try {
                     if(this.cfgObj.attr.commitRulesDefault) {
-                        return getModule('cfgInit').commitRules;
+                        return tools.getModule('cfgInit').commitRules;
                     }
                     return this.cfgObj.attr.commitRules;
                 } catch(err) {
-                    helper.warnMsg('Config file error, back to the default ones');
-                    return getModule('cfgInit').commitRules;
+                    this.warnMsg('Config file error, back to the default ones');
+                    return tools.getModule('cfgInit').commitRules;
                 }
             case cfgSym.defaultCommitRules:
                try {
@@ -180,7 +186,7 @@ const helper = new class {
             return this[helperSym.findUsrCfgAttr](attr);
         }
 
-        const cfgFile = path.join(getUsrHome(), fixSym.cfgFile);
+        const cfgFile = path.join(tools.getUsrHome(fixSym.usrHome), fixSym.cfgFile);
 
         try {
             fs.accessSync(cfgFile, fs.constants.R_OK);
@@ -227,108 +233,22 @@ const helper = new class {
     }
 }();
 
-const getModule = function(name) {
-    return require(path.join(__dirname, 'lib', name));
-}
-
-const getGitDir = function() {
-    let gitDir = null;
-    try {
-        gitDir = getModule('gitRepo').findRepoDir();
-    } catch(err) {
-        // do nothing
-    }
-
-    return gitDir;
-}
-
-const getProjectRootDir = (function() {
-    let projectRootDir
-    const gitDir = getGitDir();
-    if(gitDir) {
-        projectRootDir = gitDir.substr(0, gitDir.length-5);
-    }
-
-    return () => projectRootDir;
-})();
-
-const getUsrHome = function() {
-    return path.join(getProjectRootDir() || process.cwd(), fixSym.usrHome);
-}
-
-const runtimeLogs = function(cmd, msg) {
-    let rtmLogFile = path.join(getUsrHome(), fixSym.rtmLog);
-    try {
-        fs.appendFileSync(rtmLogFile, cmd + ': ' + msg + '\n');
-    } catch(err) {
-        // error do nothing
-    }
-}
-
-const bufferToString = function(buffer) {
-    let hasToString = buffer && typeof buffer.toString === 'function';
-    return hasToString && buffer.toString();
-}
-
-const getFileContent = function(filePath) {
-    try {
-        let buffer = fs.readFileSync(filePath);
-        return bufferToString(buffer);
-    } catch(err) {
-        // Ignore these error types because it is most likely 
-        // validating a commit from a text instead of a file
-        if(err && err.code !== 'ENOENT' && err.code !== 'ENAMETOOLONG') {
-            throw err;
-        }
-    }
-}
-
-const getCommitFrom = function(msgFile) {
-    if(!msgFile) {
-        return null;
-    }
-
-    msgFile = path.resolve(process.cwd(), msgFile);
-    let msgData = getFileContent(msgFile);
-
-    if(!msgData) {
-        const gitDir = getGitDir();
-        if(!gitDir) {
-            return null;
-        }
-        msgFile = path.resolve(gitDir, msgFile);
-        msgData = getFileContent(msgFile);
-    }
-
-    return (!msgData) ? null : { data: msgData, file: msgFile };
-}
-
-const getCommitMsg = function(msgFileOrText) {
-    const defMsg = { data: msgFileOrText, file: null  };
-    if(msgFileOrText !== undefined) {
-        return getCommitFrom(msgFileOrText) || defMsg;
-    }
-    return getCommitFrom('COMMIT_EDITMSG') || defMsg;
-}
-
 exports.standardRelease = function standardRelease() {
-    const cmdArgs = getModule('cmdParser').argv;
+    const cmdArgs = tools.getModule('cmdParser').argv;
     // console.debug(cmdArgs);
 
     helper.fixSym = fixSym;
     helper.cfgSym = cfgSym;
     helper.cmdArgs = cmdArgs;
-    helper.usrHome = getUsrHome();
+    helper.usrHome = tools.getUsrHome(fixSym.usrHome);
 
     if(cmdArgs.init == '' || cmdArgs.init != '$PWD') {
-        getModule('cfgInit').initUsrHome(helper, cmdArgs.init);
+        tools.getModule('cfgInit').initUsrHome(helper, cmdArgs.init);
     }
 
     if(cmdArgs.message) {
-        let commitMsg = getCommitMsg(cmdArgs.message);
-        const validateMsg = getModule('validateMsg').validateMsg;
-        if(!validateMsg(helper, commitMsg.data, commitMsg.file)) {
-            runtimeLogs('validateMsg', commitMsg.data);
+        if(!tools.getModule('validateMsg').validateMsg(helper)) {
+            helper.runtimeLogs('validateMsg', commitMsg.data);
             process.exit(1);
         }
     }
