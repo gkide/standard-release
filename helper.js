@@ -40,6 +40,14 @@ const helper = new class {
         return objs;
     }
 
+    isObject(val) {
+        return val && typeof(val) === 'object' && !Array.isArray(val);
+    }
+
+    isValidString(val) {
+        return Boolean(typeof(val) === 'string' && val.length > 0);
+    }
+
     hasUpper(str) {
         return /[A-Z]/.test(str);
     }
