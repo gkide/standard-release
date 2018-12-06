@@ -311,35 +311,6 @@ const getCommitMsg = function(msgFileOrText) {
     return getCommitFrom('COMMIT_EDITMSG') || defMsg;
 }
 
-const cfgInitHome = function(repoPath) {
-    const prjDir = path.resolve(process.cwd(), repoPath);
-    try { // check if it exist & has write permission
-        fs.accessSync(prjDir);
-    } catch(err) {
-        helper.errorMsg("Do not exist '" + prjDir + "'");
-    }
-
-    const gitDir = path.join(prjDir, '.git');
-    try { // check if it is a git repo
-        fs.accessSync(gitDir);
-    } catch(err) {
-        helper.errorMsg("Do not find '" + gitDir + "'");
-    }
-
-    const usrHome = path.join(prjDir, fixSym.usrHome);
-    try { // try to create config directory
-        helper.tryCreate(usrHome, () => {
-            helper.errorMsg("Already exist '" + usrHome + "'");
-        });
-    } catch(err) {
-        helper.errorMsg("Can not create directory '" + usrHome + "'");
-    }
-
-    helper.usrHome = usrHome;
-    getModule('cfgInit').usrHome(helper);
-    process.exit(0);
-}
-
 exports.standardRelease = function standardRelease() {
     const cmdArgs = getModule('cmdParser').argv;
     // console.debug(cmdArgs);
@@ -350,7 +321,7 @@ exports.standardRelease = function standardRelease() {
     helper.usrHome = getUsrHome();
 
     if(cmdArgs.init == '' || cmdArgs.init != '$PWD') {
-        cfgInitHome(cmdArgs.init); // project repo path
+        getModule('cfgInit').initUsrHome(helper, cmdArgs.init);
     }
 
     if(cmdArgs.message) {
