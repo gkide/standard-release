@@ -253,6 +253,15 @@ exports.standardRelease = function standardRelease() {
         }
     }
 
+    if(cmdArgs.changelog == '' || cmdArgs.changelog != 'CHANGELOG.md') {
+        if(cmdArgs.changelog == '') { // default
+            cmdArgs.changelog = 'CHANGELOG.md';
+        }
+        if(!tools.getModule('updateChangelog').updateChangelog(helper)) {
+            helper.errorMsg('update changelog error, exit.');
+        }
+    }
+
     if(cmdArgs.first) {
         if(!tools.getModule('first').doFirstRelease(helper)) {
             helper.errorMsg('first release error, exit.');
