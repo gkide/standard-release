@@ -15,7 +15,7 @@
         "name": "charlie-wong",
         "email": "charlie-wong@foxmail.com"
     },
-    "main": "index.js",
+    "main": "",
     "bin": {
         "standard-release": "bin/cli.js"
     },
@@ -28,7 +28,7 @@
         "url": "git+https://github.com/gkide/standard-release.git"
     },
     "scripts": {
-        "test": "echo todo ..."
+        "test": "mocha test.js"
     },
     "dependencies": {
         "findup": "^0.1.5",
@@ -38,5 +38,9 @@
         "semver-diff": "^2.1.0",
         "git-semver-tags": "^2.0.2",
         "find-parent-dir": "^0.3.0"
+    },
+    "devDependencies": {
+        "mocha": "^5.2.0",
+        "shelljs": "^0.8.3"
     }
 }
