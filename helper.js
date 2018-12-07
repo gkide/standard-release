@@ -268,6 +268,6 @@ exports.standardRelease = function standardRelease() {
         }
     }
 
-    console.log("standard-release %s", chalk.green('OK'));
+    //console.log("standard-release %s", chalk.green('OK'));
     process.exit(0);
 }
