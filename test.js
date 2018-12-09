@@ -884,6 +884,181 @@ describe('standard-release --message', function() {
         chai.expect(ret.stdout).to.empty;
         chai.expect(ret.stderr).to.equal(stderrMsg);
     });
+
+    it('skip Working In Processing(WIP)', function() {
+        const commitMsg = 'WIP: subject\n\nboddy\n\n';
+        const data = shell.exec('echo -n "' + commitMsg + '"');
+        let ret = standardRelease('-m "' + data.stdout + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.equal('INFO: Commit message validation ignored for WIP\n');
+        chai.expect(ret.stderr).to.empty;
+
+        ret = standardRelease('-x -m "' + commitMsg + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.equal('INFO: Commit message validation ignored for WIP\n');
+        chai.expect(ret.stderr).to.empty;
+        chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-x -m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+        chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
+    });
+
+    it('footer error', function() {
+        let commitMsg = 'build: subject\n\n'
+            + 'boddy\n\n'
+            + 'footer';
+        let data = shell.exec('echo -n "' + commitMsg + '"');
+        let ret = standardRelease('-m "' + data.stdout + '"');
+        chai.expect(ret.code).to.equal(1);
+        chai.expect(ret.stdout).to.empty;
+        const stderrMsg = 'ERROR: <footer> invalid because not one of:\n'
+            + '[CLOSE] ... or [CLOSE#XXX] ...\n'
+            + '[KNOWN ISSUE] ... or [KNOWN ISSUE#XXX] ...\n'
+            + '[BREAKING CHANGES] ... or [BREAKING CHANGES#XXX] ...\n';
+        chai.expect(ret.stderr).to.equal(stderrMsg);
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(1);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.equal(stderrMsg);
+    });
+
+    it('footer [CLOSE]', function() {
+        let commitMsg = 'build: subject\n\n'
+            + 'boddy\n\n'
+            + '[CLOSE] fix user config file crash';
+        let data = shell.exec('echo -n "' + commitMsg + '"');
+        let ret = standardRelease('-m "' + data.stdout + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        commitMsg = 'build: subject\n\n'
+            + 'boddy\n\n'
+            + '[CLOSE#1] fix user config file crash';
+        data = shell.exec('echo -n "' + commitMsg + '"');
+        ret = standardRelease('-m "' + data.stdout + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+    });
+
+    it('footer [KNOWN ISSUE]', function() {
+        let commitMsg = 'build: subject\n\n'
+            + 'boddy\n\n'
+            + '[KNOWN ISSUE] the tcp connect to server may failed';
+        let data = shell.exec('echo -n "' + commitMsg + '"');
+        let ret = standardRelease('-m "' + data.stdout + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        commitMsg = 'build: subject\n\n'
+            + 'boddy\n\n'
+            + '[KNOWN ISSUE#1] the tcp connect to server may failed';
+        data = shell.exec('echo -n "' + commitMsg + '"');
+        ret = standardRelease('-m "' + data.stdout + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+    });
+
+    it('footer [BREAKING CHANGES]', function() {
+        let commitMsg = 'build: subject\n\n'
+            + 'boddy\n\n'
+            + '[BREAKING CHANGES] rename API: libthisAPI() => libthatAPI()';
+        let data = shell.exec('echo -n "' + commitMsg + '"');
+        let ret = standardRelease('-m "' + data.stdout + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        commitMsg = 'build: subject\n\n'
+            + 'boddy\n\n'
+            + '[BREAKING CHANGES#1] libthisAPI() => libthatAPI()';
+        data = shell.exec('echo -n "' + commitMsg + '"');
+        ret = standardRelease('-m "' + data.stdout + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+    });
+
+    it('footer with comments', function() {
+        let commitMsg = 'build: subject\n\n'
+            + 'boddy\n\n'
+            + '[KNOWN ISSUE#135] THIS IS AN ISSUE\n'
+            + '[KNOWN ISSUE#178] THIS IS ISSUE 1\n'
+            + '[KNOWN ISSUE#298] THIS IS ISSUE 2\n'
+            + '[CLOSE] close a important bug\n'
+            + '[CLOSE#1] close issue again\n'
+            + '[CLOSE#15] close issue not import\n'
+            + '[CLOSE#125] close an issue again\n'
+            + '[BREAKING CHANGES] this is ui breaking change\n'
+            + '[BREAKING CHANGES#158] this is lib breaking change\n'
+            + '[BREAKING CHANGES#782] this is core breaking change\n'
+            + '[BREAKING CHANGES#054] all breaking changed\n'
+            + '#comment lines start by #\n'
+            + '# will auto remove, they will not\n'
+            + '#a part of the commit message\n';
+        let data = shell.exec('echo -n "' + commitMsg + '"');
+        let ret = standardRelease('-m "' + data.stdout + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+    });
 });
 
 describe('standard-release --message(usr config)', function() {
@@ -972,7 +1147,7 @@ describe('standard-release --message(usr config)', function() {
         chai.expect(ret.stderr).to.equal(stderrMsg);
     });
 
-    it('ok', function() {
+    it('valid commit', function() {
         const commitMsg = 'typea(ok): ok\n\nok\n\nok';
         let data = shell.exec('echo -n "' + commitMsg + '"');
         let ret = standardRelease('-m "' + data.stdout + '"');
