@@ -15,7 +15,6 @@ function standardRelease(argString) {
 
 function gitTag(tag, msg) {
     shell.exec('git tag -a ' + tag + ' -m "' + msg + '"');
-    shell.exec('git tag -a v1.0.0 -m "my awesome first release"');
 }
 
 function gitBranch(branch) {
