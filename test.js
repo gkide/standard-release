@@ -85,14 +85,7 @@ describe('standard-release --message', function() {
         shell.rm('-rf', 'tmp');
         shell.mkdir('tmp');
         shell.cd('tmp');
-        shell.exec('git init');
-        gitCommit('Init commit');
-        shell.exec('touch README.md');
-        shell.exec('touch .gitignore');
-        shell.exec('echo ".standard-release/" > .gitignore');
-        shell.exec('git add .');
-        gitCommit('feat: first commit');
-        gitTag('v1.0.0', 'my awesome first release');
+        shell.exec('mkdir .git');
         standardRelease('-i');
     });
     afterEach(function() {
@@ -874,6 +867,23 @@ describe('standard-release --message', function() {
         chai.expect(ret.stdout).to.empty;
         chai.expect(ret.stderr).to.empty;
     });
+
+    it('header message too long', function() {
+        let commitMsg = 'build: long header message more then 80 characters,'
+            + 'long header message more then 80 characters,'
+            + 'long header message more then 80 characters';
+        let ret = standardRelease('-m "' + commitMsg + '"');
+        chai.expect(ret.code).to.equal(1);
+        let stderrMsg = "ERROR: Header is longer than 80 chars\n";
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.equal(stderrMsg);
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(1);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.equal(stderrMsg);
+    });
 });
 
 describe('standard-release --message(usr config)', function() {
@@ -881,18 +891,12 @@ describe('standard-release --message(usr config)', function() {
         shell.rm('-rf', 'tmp');
         shell.mkdir('tmp');
         shell.cd('tmp');
-        shell.exec('git init');
-        gitCommit('Init commit');
-        shell.exec('touch README.md');
-        shell.exec('touch .gitignore');
-        shell.exec('echo ".standard-release/" > .gitignore');
-        shell.exec('git add .');
-        gitCommit('feat: first commit');
-        gitTag('v1.0.0', 'my awesome first release');
+        shell.exec('mkdir .git');
         standardRelease('-i');
         const usrConfigData = "exports.attr = {\n"
             + "    commitRules: {\n"
             + "        header: {\n"
+            + "            maxLength: 100,\n"
             + "            type: [\n"
             + "                { skip: false, isFilter: true, name: 'typea' },\n"
             + "                { skip: false, isFilter: true, name: 'typeb' },\n"
@@ -1097,5 +1101,48 @@ describe('standard-release --message(usr config)', function() {
         chai.expect(ret.stdout).to.empty;
         chai.expect(ret.stderr).to.empty;
         chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
+    });
+
+    it('Merge branch plugins', function() {
+        const commitMsg = 'Merge branch plugins';
+        let ret = standardRelease('-m "' + commitMsg + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.equal('INFO: Merge commit detected, skip.\n');
+        chai.expect(ret.stderr).to.empty;
+
+        ret = standardRelease('-x -m "' + commitMsg + '"');
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.equal('INFO: Merge commit detected, skip.\n');
+        chai.expect(ret.stderr).to.empty;
+
+        ret = standardRelease('-x -m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(0);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.empty;
+
+        chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
+    });
+
+    it('header message too long', function() {
+        let commitMsg = 'typea(ok): long header message more then 100 characters,'
+            + 'long header message more then 100 characters,'
+            + 'long header message more then 100 characters';
+        let ret = standardRelease('-m "' + commitMsg + '"');
+        chai.expect(ret.code).to.equal(1);
+        let stderrMsg = "ERROR: Header is longer than 100 chars\n";
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.equal(stderrMsg);
+
+        writeCommitMsgToFile(commitMsg);
+        ret = standardRelease('-m ' + commitMsgFile);
+        chai.expect(ret.code).to.equal(1);
+        chai.expect(ret.stdout).to.empty;
+        chai.expect(ret.stderr).to.equal(stderrMsg);
     });
 });
