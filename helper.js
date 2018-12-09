@@ -160,12 +160,12 @@ const helper = new class {
         switch(attr) {
             case cfgSym.usrCfgCommitRules:
                try {
-                    if(this.cfgObj.attr.commitRulesDefault) {
-                        return defCfgObj.commitRules;
+                    if(this.getUsrConfig(cfgSym.defaultCommitRules)) {
+                        return defCfgObj.attr.commitRules;;
                     }
                     return this.cfgObj.attr.commitRules;
                 } catch(err) {
-                    return defCfgObj.commitRules;
+                    return {};
                 }
             case cfgSym.defaultCommitRules:
                try {
@@ -247,9 +247,8 @@ exports.standardRelease = function standardRelease() {
         tools.getModule('cfgInit').initUsrHome(helper, cmdArgs.init);
     }
 
-    if(cmdArgs.message) {
+    if(typeof(cmdArgs.message) != 'undefined') {
         if(!tools.getModule('validateMsg').validateMsg(helper)) {
-            helper.runtimeLogs('validateMsg', commitMsg.data);
             process.exit(1);
         }
     }

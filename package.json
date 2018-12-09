@@ -28,7 +28,8 @@
         "url": "git+https://github.com/gkide/standard-release.git"
     },
     "scripts": {
-        "test": "mocha test.js"
+        "test": "mocha --timeout=5000 test.js",
+        "dev-test": "mocha --timeout=5000 todo/test.js"
     },
     "dependencies": {
         "findup": "^0.1.5",
