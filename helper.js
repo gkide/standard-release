@@ -151,20 +151,21 @@ const helper = new class {
     }
 
     [helperSym.findUsrCfgAttr](attr) {
+        const defCfgObj = tools.getModule('cfgInit');
         if(!this.cfgObj) {
-            return false;
+            this.warnMsg('Config file missing, back to the default ones');
+            this.cfgObj = defCfgObj;
         }
 
         switch(attr) {
             case cfgSym.usrCfgCommitRules:
                try {
                     if(this.cfgObj.attr.commitRulesDefault) {
-                        return tools.getModule('cfgInit').commitRules;
+                        return defCfgObj.commitRules;
                     }
                     return this.cfgObj.attr.commitRules;
                 } catch(err) {
-                    this.warnMsg('Config file error, back to the default ones');
-                    return tools.getModule('cfgInit').commitRules;
+                    return defCfgObj.commitRules;
                 }
             case cfgSym.defaultCommitRules:
                try {
