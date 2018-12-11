@@ -21,14 +21,18 @@ function getPackageVersion() {
 // Suppresses all command output if true, except for echo() calls.
 shell.config.silent = true;
 
-let testSuite
-
 // standard-release -i
-testSuite = require(path.resolve(__dirname, 'init.js'));
-testSuite.runTesting(standardRelease);
+const initSuite = path.resolve(__dirname, 'init.js');
+require(initSuite).runTesting(standardRelease);
 
-// standard-release -m
-testSuite = require(path.resolve(__dirname, 'message-default.js'));
-testSuite.runTesting(standardRelease);
-testSuite = require(path.resolve(__dirname, 'message-custom.js'));
-testSuite.runTesting(standardRelease);
+// standard-release -m, use default configuration commit rules 
+const msgDefaultSuite = path.resolve(__dirname, 'message-default.js');
+require(msgDefaultSuite).runTesting(standardRelease);
+
+// standard-release -m, use custom configuration commit rules
+const msgCustomSuite = path.resolve(__dirname, 'message-custom.js');
+require(msgCustomSuite).runTesting(standardRelease);
+
+// package: git semver tags
+const GitTagsSuite = path.resolve(__dirname, 'package', 'gitTags.js');
+require(GitTagsSuite).runTesting();
