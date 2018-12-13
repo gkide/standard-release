@@ -254,8 +254,8 @@ exports.standardRelease = function standardRelease() {
     }
 
     if(cmdArgs.changelog == '' || cmdArgs.changelog != 'CHANGELOG.md') {
-        if(cmdArgs.changelog == '') { // default
-            cmdArgs.changelog = 'CHANGELOG.md';
+        if(cmdArgs.changelog == '') {
+            cmdArgs.changelog = 'CHANGELOG.md'; // default
         }
         if(!tools.getModule('updateChangelog').updateChangelog(helper)) {
             helper.errorMsg('update changelog error, exit.');
