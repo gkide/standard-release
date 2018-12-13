@@ -7,7 +7,6 @@ const semver = require('semver');
 const shell = require('shelljs');
 const chai = require('chai');
 
-const git = path.resolve(__dirname, 'git.js');
 const cliPath = path.resolve(__dirname, '..', 'bin', 'cli.js');
 
 function standardRelease(argString) {
@@ -21,6 +20,10 @@ function getPackageVersion() {
 // Suppresses all command output if true, except for echo() calls.
 shell.config.silent = true;
 
+// package: git semver tags
+const myGitSuite = path.resolve(__dirname, 'package', 'myGit.js');
+require(myGitSuite).runTesting();
+
 // standard-release -i
 const initSuite = path.resolve(__dirname, 'init.js');
 require(initSuite).runTesting(standardRelease);
@@ -33,6 +36,3 @@ require(msgDefaultSuite).runTesting(standardRelease);
 const msgCustomSuite = path.resolve(__dirname, 'message-custom.js');
 require(msgCustomSuite).runTesting(standardRelease);
 
-// package: git semver tags
-const GitTagsSuite = path.resolve(__dirname, 'package', 'gitTags.js');
-require(GitTagsSuite).runTesting();

@@ -5,7 +5,7 @@ const path = require('path');
 const chai = require('chai');
 const shell = require('shelljs');
 
-const gitTags = require(path.resolve(__dirname, '..', '..', 'lib', 'gitTags'));
+const gitTags = require(path.resolve(__dirname, '..', '..', 'lib', 'myGit'));
 const mySemVer = require(path.resolve(__dirname, '..', '..', 'lib', 'mySemVer'));
 
 function initTmpRepo() {
