@@ -263,7 +263,7 @@ exports.standardRelease = function standardRelease() {
     }
 
     if(cmdArgs.first) {
-        if(!tools.getModule('first').doFirstRelease(helper)) {
+        if(!tools.getModule('doRelease').doFirstRelease(helper)) {
             helper.errorMsg('first release error, exit.');
         }
     }
