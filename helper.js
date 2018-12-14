@@ -92,7 +92,11 @@ const helper = new class {
         }
     }
 
-    infoMsg(msg) { // stdout
+    infoMsg(msg, noSkip) { // stdout
+        if(noSkip) {
+            console.info("%s", msg);
+            return;
+        }
         if(!this.cmdArgs.silent) {
             console.info("%s: %s", chalk.green('INFO'), msg);
         }
