@@ -1,6 +1,12 @@
 # Change Log
 ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 
+## Release [v0.0.3](https://github.com/gkide/standard-release/releases/tag/v0.0.3)
+
+### BugFixes
+- fix: changlog update from latest tag to HEAD ([4094e42](https://github.com/gkide/standard-release/commit/4094e42))
+- fix: skip # comments lines for header/body/footer ([d4d7507](https://github.com/gkide/standard-release/commit/d4d7507))
+
 ## Release [v0.0.2](https://github.com/gkide/standard-release/releases/tag/v0.0.2)
 
 ### Features
