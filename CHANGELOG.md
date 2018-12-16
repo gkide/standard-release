@@ -1,6 +1,11 @@
 # Change Log
 ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 
+## Release [v0.0.4](https://github.com/gkide/standard-release/releases/tag/v0.0.4)
+
+### BugFixes
+- fix: default footer checking invalid line ([42d7358](https://github.com/gkide/standard-release/commit/42d7358))
+
 ## Release [v0.0.3](https://github.com/gkide/standard-release/releases/tag/v0.0.3)
 
 ### BugFixes
