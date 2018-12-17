@@ -12,7 +12,7 @@ function runTesting(standardRelease) {
             shell.rm('-rf', 'tmp');
             shell.mkdir('tmp');
             shell.cd('tmp');
-            shell.exec('mkdir .git');
+            shell.exec('git init');
             standardRelease('-i');
             const usrConfigData = "exports.attr = {\n"
                 + "    commitRules: {\n"
