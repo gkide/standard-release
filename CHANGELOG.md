@@ -1,6 +1,11 @@
 # Change Log
 ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 
+## Release [v0.0.5](https://github.com/gkide/standard-release/releases/tag/v0.0.5)
+
+### BugFixes
+- fix: default footer checking & testing ([1359a7b](https://github.com/gkide/standard-release/commit/1359a7b))
+
 ## Release [v0.0.4](https://github.com/gkide/standard-release/releases/tag/v0.0.4)
 
 ### BugFixes
