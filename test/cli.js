@@ -36,3 +36,6 @@ require(msgDefaultSuite).runTesting(standardRelease);
 const msgCustomSuite = path.resolve(__dirname, 'message-custom.js');
 require(msgCustomSuite).runTesting(standardRelease);
 
+// standard-release --is-semver
+const mySemVerSuite = path.resolve(__dirname, 'mySemVer.js');
+require(mySemVerSuite).runTesting(standardRelease);
