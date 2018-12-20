@@ -1,6 +1,11 @@
 # Change Log
 ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 
+## Release [v0.0.6](https://github.com/gkide/standard-release/releases/tag/v0.0.6)
+
+### BugFixes
+- fix: stupid init bugs ([20273bb](https://github.com/gkide/standard-release/commit/20273bb))
+
 ## Release [v0.0.5](https://github.com/gkide/standard-release/releases/tag/v0.0.5)
 
 ### BugFixes
