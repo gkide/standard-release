@@ -272,6 +272,14 @@ exports.standardRelease = function standardRelease() {
         }
     }
 
+    if(cmdArgs.isSemver) {
+        if(!tools.getModule('mySemVer').isValidSemver(cmdArgs.isSemver)) {
+            const msg = helper.colorKeys('blue', { [cmdArgs.isSemver]:true });
+            helper.infoMsg('Not valid semver(https://semver.org/) => ' + msg);
+            process.exit(1);
+        }
+    }
+
     //console.log("standard-release %s", chalk.green('OK'));
     process.exit(0);
 }
