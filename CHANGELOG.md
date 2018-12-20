@@ -1,6 +1,11 @@
 # Change Log
 ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 
+## Release [v0.1.0](https://github.com/gkide/standard-release/releases/tag/v0.1.0)
+
+### Features
+- feat: check if it is a semver ([c8e9c7c](https://github.com/gkide/standard-release/commit/c8e9c7c))
+
 ## Release [v0.0.6](https://github.com/gkide/standard-release/releases/tag/v0.0.6)
 
 ### BugFixes
