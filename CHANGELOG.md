@@ -1,6 +1,11 @@
 # Change Log
 ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 
+## Release [v0.1.1](https://github.com/gkide/standard-release/releases/tag/v0.1.1)
+
+### BugFixes
+- fix: commit object parse ([71b8c52](https://github.com/gkide/standard-release/commit/71b8c52))
+
 ## Release [v0.1.0](https://github.com/gkide/standard-release/releases/tag/v0.1.0)
 
 ### Features
