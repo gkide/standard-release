@@ -812,12 +812,12 @@ function runTesting(standardRelease) {
             chai.expect(ret.stderr).to.equal(stderrMsg);
         });
 
-        it('skip Working In Processing(WIP)', function() {
-            const commitMsg = 'WIP: subject\n\nboddy\n\n';
+        it('skip Working In Processing(wip)', function() {
+            const commitMsg = 'wip: subject\n\nboddy\n\n';
             const data = shell.exec('echo -n "' + commitMsg + '"');
             let ret = standardRelease('-m "' + data.stdout + '"');
             chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.equal('INFO: Commit message validation ignored for WIP\n');
+            chai.expect(ret.stdout).to.equal('INFO: Commit message validation ignored for wip\n');
             chai.expect(ret.stderr).to.empty;
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
@@ -828,7 +828,7 @@ function runTesting(standardRelease) {
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.equal('INFO: Commit message validation ignored for WIP\n');
+            chai.expect(ret.stdout).to.equal('INFO: Commit message validation ignored for wip\n');
             chai.expect(ret.stderr).to.empty;
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
 
