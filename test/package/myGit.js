@@ -34,7 +34,7 @@ function runTestingAsync() {
 
         it('should get no semver tags', (done) => {
             fs.writeFileSync('test1', '');
-            shell.exec('git add --all && git commit -m "First commit"');
+            shell.exec('git add --all && git commit -m "chore: first commit"');
             shell.exec('git tag foo');
             gitTags.semverTagFilter('', (err, semTags, gitTags) => {
                 chai.expect(err).to.be.null;
@@ -46,10 +46,10 @@ function runTestingAsync() {
 
         it('should get the semver tag', (done) => {
             fs.writeFileSync('test2', '');
-            shell.exec('git add --all && git commit -m"Second commit"');
+            shell.exec('git add --all && git commit -m"chore: second commit"');
             shell.exec('git tag v2.0.0');
             fs.writeFileSync('test3', '');
-            shell.exec('git add --all && git commit -m"Third commit"');
+            shell.exec('git add --all && git commit -m"chore: third commit"');
             shell.exec('git tag va.b.c');
             gitTags.semverTagFilter('', (err, semTags, gitTags) => {
                 chai.expect(err).to.be.null;
@@ -100,7 +100,7 @@ function runTestingAsync() {
 
         it('should be in reverse commit/ASCII order', (done) => {
             fs.writeFileSync('test4', '');
-            shell.exec('git add --all && git commit -m"Fourth commit"');
+            shell.exec('git add --all && git commit -m"chore: fourth commit"');
             shell.exec('git tag v1.0.0');
             gitTags.semverTagFilter('', (err, semTags, gitTags) => {
                 chai.expect(err).to.be.null;
@@ -119,7 +119,7 @@ function runTestingAsync() {
 
         it('should work with prerelease', (done) => {
             fs.writeFileSync('test5', '');
-            shell.exec('git add --all && git commit -m"Fifth commit"');
+            shell.exec('git add --all && git commit -m"chore: fifth commit"');
             shell.exec('git tag 5.0.0-pre');
             gitTags.semverTagFilter('', (err, semTags, gitTags) => {
                 chai.expect(err).to.be.null;
@@ -139,7 +139,7 @@ function runTestingAsync() {
 
         it('should tag prefix works(V)', (done) => {
             fs.writeFileSync('test6', '');
-            shell.exec('git add --all && git commit -m "test6"');
+            shell.exec('git add --all && git commit -m "chore: test6"');
             shell.exec('git tag V1.0.0');
             shell.exec('git tag V2.0.0');
             shell.exec('git tag Va.b.c');
@@ -153,7 +153,7 @@ function runTestingAsync() {
 
         it('should tag prefix works(foo-bar@)', (done) => {
             fs.writeFileSync('test5', '');
-            shell.exec('git add --all && git commit -m "test5"');
+            shell.exec('git add --all && git commit -m "chore: test5"');
             shell.exec('git tag foo-bar@1.0.0');
             shell.exec('git tag foo-bar@v2.0.0');
             shell.exec('git tag foo-bar@va.b.c');
@@ -168,7 +168,7 @@ function runTestingAsync() {
         it('should work with empty commit', (done) => {
             shell.exec('rm -rf .git test*');
             shell.exec('git init');
-            shell.exec('git commit --allow-empty -m "empty commit"');
+            shell.exec('git commit --allow-empty -m "chore: empty commit"');
             shell.exec('git tag v1.1.0');
             shell.exec('git tag pkg@1.0.0'); // should be ignored.
             gitTags.semverTagFilter('', (err, semTags, gitTags) => {
@@ -195,7 +195,7 @@ function runTestingSync() {
 
         it('should get no semver tags', (done) => {
             fs.writeFileSync('test1', '');
-            shell.exec('git add --all && git commit -m "First commit"');
+            shell.exec('git add --all && git commit -m "chore: first commit"');
             shell.exec('git tag foo');
             const tags = gitTags.semverTagFilterSync('');
             chai.expect(tags.semTags).to.be.empty;
@@ -205,10 +205,10 @@ function runTestingSync() {
 
         it('should get the semver tag', (done) => {
             fs.writeFileSync('test2', '');
-            shell.exec('git add --all && git commit -m"Second commit"');
+            shell.exec('git add --all && git commit -m"chore: second commit"');
             shell.exec('git tag v2.0.0');
             fs.writeFileSync('test3', '');
-            shell.exec('git add --all && git commit -m"Third commit"');
+            shell.exec('git add --all && git commit -m"chore: third commit"');
             shell.exec('git tag va.b.c');
             const tags = gitTags.semverTagFilterSync('');
             chai.expect(tags.semTags).to.deep.equal(['v2.0.0']);
@@ -251,7 +251,7 @@ function runTestingSync() {
 
         it('should be in reverse commit/ASCII order', (done) => {
             fs.writeFileSync('test4', '');
-            shell.exec('git add --all && git commit -m"Fourth commit"');
+            shell.exec('git add --all && git commit -m"chore: fourth commit"');
             shell.exec('git tag v1.0.0');
             const tags = gitTags.semverTagFilterSync('');
             const wantTags = [
@@ -268,7 +268,7 @@ function runTestingSync() {
 
         it('should work with prerelease', (done) => {
             fs.writeFileSync('test5', '');
-            shell.exec('git add --all && git commit -m"Fifth commit"');
+            shell.exec('git add --all && git commit -m"chore: fifth commit"');
             shell.exec('git tag 5.0.0-pre');
             const tags = gitTags.semverTagFilterSync('');
             const wantTags = [
@@ -286,7 +286,7 @@ function runTestingSync() {
 
         it('should tag prefix works(V)', (done) => {
             fs.writeFileSync('test6', '');
-            shell.exec('git add --all && git commit -m "test6"');
+            shell.exec('git add --all && git commit -m "chore: test6"');
             shell.exec('git tag V1.0.0');
             shell.exec('git tag V2.0.0');
             shell.exec('git tag Va.b.c');
@@ -298,7 +298,7 @@ function runTestingSync() {
 
         it('should tag prefix works(foo-bar@)', (done) => {
             fs.writeFileSync('test5', '');
-            shell.exec('git add --all && git commit -m "test5"');
+            shell.exec('git add --all && git commit -m "chore: test5"');
             shell.exec('git tag foo-bar@1.0.0');
             shell.exec('git tag foo-bar@v2.0.0');
             shell.exec('git tag foo-bar@va.b.c');
@@ -311,7 +311,7 @@ function runTestingSync() {
         it('should work with empty commit', (done) => {
             shell.exec('rm -rf .git test*');
             shell.exec('git init');
-            shell.exec('git commit --allow-empty -m "empty commit"');
+            shell.exec('git commit --allow-empty -m "chore: empty commit"');
             shell.exec('git tag v1.1.0');
             shell.exec('git tag pkg@1.0.0'); // should be ignored
             const tags = gitTags.semverTagFilterSync('');
