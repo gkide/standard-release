@@ -247,7 +247,7 @@ exports.standardRelease = function standardRelease() {
     helper.cmdArgs = cmdArgs;
     helper.usrHome = tools.getUsrHome(fixSym.usrHome);
 
-    if(cmdArgs.init == '' || cmdArgs.init != '$PWD') {
+    if(typeof(cmdArgs.init) != 'undefined') {
         tools.getModule('cfgInit').initUsrHome(helper, cmdArgs.init);
     }
 
@@ -257,10 +257,7 @@ exports.standardRelease = function standardRelease() {
         }
     }
 
-    if(cmdArgs.changelog == '' || cmdArgs.changelog != 'CHANGELOG.md') {
-        if(cmdArgs.changelog == '') {
-            cmdArgs.changelog = 'CHANGELOG.md'; // default
-        }
+    if(typeof(cmdArgs.changelog) != 'undefined') {
         if(!tools.getModule('updateChangelog').updateChangelog(helper)) {
             helper.errorMsg('update changelog error, exit.');
         }
