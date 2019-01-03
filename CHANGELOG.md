@@ -1,6 +1,11 @@
 # Change Log
 ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 
+## Release [v0.1.2](https://github.com/gkide/standard-release/releases/tag/v0.1.2)
+
+### Style
+- style: WIP => wip ([71b8c52](https://github.com/gkide/standard-release/commit/12383b2))
+
 ## Release [v0.1.1](https://github.com/gkide/standard-release/releases/tag/v0.1.1)
 
 ### BugFixes
