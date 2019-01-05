@@ -1,6 +1,11 @@
 # Change Log
 ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 
+## Release [v0.1.3-rc.1](https://github.com/gkide/standard-release/releases/tag/v0.1.3-rc.1)
+
+### BugFixes
+- fix: cmd args no default & reasonal & readable, auto creat not error ([47b7128](https://github.com/gkide/standard-release/commit/47b7128))
+
 ## Release [v0.1.2](https://github.com/gkide/standard-release/releases/tag/v0.1.2)
 
 ### Style
