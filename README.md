@@ -1,6 +1,6 @@
 # standard-release
 
-## Init and do custome config
+## Init and Config
 
 `standard-release -i` will generated **.standard-release** directory.
 
@@ -9,15 +9,15 @@
 - `semver.example.js` the same as ``-X``, ``-Y``, ``-Z``, ``-P`` and ``-B``,
    but cmd-line have high priority.
 
-## Generated changelog
+## Generated Changelog
 
 `standard-release -c` will generated change-log if the repo
-commit following the **Conventional Commits Format**. It also
-guess the next version shoulb be used base on the git log history
+commit following the [Conventional Commits]((https://conventionalcommits.org)).
+It also guess the next version shoulb be used base on the git log history
 which begins with the previous release tag if the commit following
 the default settings.
 
-### Conventional Commits Format
+### Conventional Commits
 
 ```
 <type>(<scope>): <subject>
@@ -119,3 +119,5 @@ or
 
 - [Semantic Versioning](https://semver.org/)
 - [Conventional Commits](https://github.com/conventional-commits/conventionalcommits.org)
+- [Change Log Style](https://codingart.readthedocs.io/en/latest/ChangeLog.html)
+- [Ideal Change Log](https://github.com/gkide/coding-style/blob/master/data/CHANGELOG.md)
