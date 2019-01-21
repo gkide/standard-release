@@ -1,27 +1,23 @@
 # standard-release
 
-# Init and do custome config
+## Init and do custome config
 
-run `standard-release -i` will generated **.standard-release** directory,
-which contains `config.js`, `config.example.js` and `semver.example.js`.
+`standard-release -i` will generated **.standard-release** directory.
 
-- `config.js` is configurations for commit message checking, affect **standard-release -m**
-- `config.example.js` is the example of **config.js**. The commit message
-   **header**(type/scope/subject), **body**, **footer** checking all can be
-   customed as what you needed. The type values in this file is what used
-   default for checking commit message header **type** filed.
-- `semver.example.js` is the same as **-X**, **-Y**, **-Z**, **-P**
-   and **-B**, but the command arguments have high priority.
+-  Commit message checking configurations `config.js`, affect ``standard-release -m``
+- `config.example.js` the example of **config.js** for commit message style checking.
+- `semver.example.js` the same as ``-X``, ``-Y``, ``-Z``, ``-P`` and ``-B``,
+   but cmd-line have high priority.
 
-# Auto generated changelog
+## Generated changelog
 
-use `standard-release -c` to generated change log if the repo
-commit messages following the **Conventional Commits Format**.
-It also gives up the next version shoulb be used base on the
-commit message which begins with the previous release tag if the
-commit message following the default settings.
+`standard-release -c` will generated change-log if the repo
+commit following the **Conventional Commits Format**. It also
+guess the next version shoulb be used base on the git log history
+which begins with the previous release tag if the commit following
+the default settings.
 
-## Conventional Commits Format
+### Conventional Commits Format
 
 ```
 <type>(<scope>): <subject>
@@ -34,7 +30,7 @@ commit message following the default settings.
 - `<type>` & `<subject>` are expected, others are optional
 - All message lines prefer not being longer than 100 characters
 
-## `<type>` should be one of
+### `<type>` should be one of
 
 - `fix` A bug fix
 - `feat` Introduce or modify the codebase features
@@ -50,7 +46,7 @@ commit message following the default settings.
 - `refactor` Changes that neither fixes a bug nor adds a feature
 - `wip` Something which is working in process
 
-## `<scope>` is optional
+### `<scope>` is optional
 
 If any, it should be one word for further supplement, for example:
 
@@ -58,7 +54,7 @@ If any, it should be one word for further supplement, for example:
 - **compile** changes has relation with compilation
 - **network** for changes that related to a module, like network
 
-## `<subject>` should be a short line of succinct description for the changes
+### `<subject>` should be a short line of succinct description for the changes
 
 The subject should following the rules:
 
@@ -66,14 +62,14 @@ The subject should following the rules:
 - do not capitalize the first letter
 - use the imperative, present tense: "change" not "changed" nor "changes"
 
-## `<body>` is optional
+### `<body>` is optional
 
 If any, it should include motivation for the change and following the rules:
 
 - what this commit changes, and why?
 - use the imperative, present tense: "change" not "changed" nor "changes"
 
-## `<footer>` is optional
+### `<footer>` is optional
 
 If any, it should be one of the following ones:
 
@@ -120,5 +116,6 @@ or
 ```
 
 ## Reference
+
 - [Semantic Versioning](https://semver.org/)
 - [Conventional Commits](https://github.com/conventional-commits/conventionalcommits.org)
