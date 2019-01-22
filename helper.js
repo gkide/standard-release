@@ -1,16 +1,18 @@
 'use strict';
 
+// Native
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const assert = require('assert');
 
+// Packages
 const chalk = require('chalk');
 
+// Utilities
 const tools = require(path.join(__dirname, 'lib', 'tools'));
 
 const fixSym = {
-    rtmLog: "logs",
     cfgFile: "config.js",
     usrHome: ".standard-release",
 }
@@ -113,10 +115,6 @@ const helper = new class {
         if(exit) {
             process.exit(1);
         }
-    }
-
-    runtimeLogs(cmd, msg) {
-        tools.runtimeLogs(cmd, msg, fixSym.usrHome, fixSym.rtmLog);
     }
 
     tryCreate(fullPath, existCallback, initData, dataType=null) {
