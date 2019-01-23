@@ -172,7 +172,7 @@ const helper = new class {
             this[helperSym.commitRulesT] = 'user';
         } catch(err) {
             // user commit rules missing, back to the default ones
-            this.cfgObj = tools.getModule('cfgInit');
+            this.cfgObj = tools.getModule('doInit');
             this[helperSym.commitRulesT] = 'default';
         }
 
@@ -213,7 +213,7 @@ exports.standardRelease = function standardRelease() {
     helper.usrHome = config.getUsrHome();
 
     if(typeof(cmdArgs.init) != 'undefined') {
-        tools.getModule('cfgInit').initUsrHome(helper, cmdArgs.init);
+        tools.getModule('doInit').usrHome(helper, cmdArgs.init);
     }
 
     if(typeof(cmdArgs.message) != 'undefined') {

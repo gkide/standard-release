@@ -5,7 +5,7 @@
 `standard-release -i` will generated **.standard-release** directory.
 
 -  Commit message checking rules `commit.js`, affect ``standard-release -m``
-- `config.example.js` the example of **commit.js** for commit message style checking.
+- `commit.example.js` the default rules for commit message style checking.
 - `semver.example.js` the same as ``-X``, ``-Y``, ``-Z``, ``-P`` and ``-B``,
    but cmd-line have high priority.
 
