@@ -223,7 +223,7 @@ exports.standardRelease = function standardRelease() {
     }
 
     if(typeof(cmdArgs.changelog) != 'undefined') {
-        if(!tools.getModule('updateChangelog').updateChangelog(helper)) {
+        if(!tools.getModule('myChangelog').update(helper)) {
             helper.errorMsg('update changelog error, exit.');
         }
     }

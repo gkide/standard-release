@@ -2,6 +2,7 @@
 
 'use strict';
 
+// Native
 const path = require('path');
 
 if(process.version.match(/v(\d+)\./)[1] < 6) {
