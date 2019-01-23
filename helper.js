@@ -11,24 +11,22 @@ const chalk = require('chalk');
 
 // Utilities
 const tools = require(path.join(__dirname, 'lib', 'tools'));
+const config = require(path.join(__dirname, 'lib', 'config'));
 
 const fixSym = {
     cfgFile: "config.js",
-    usrHome: ".standard-release",
 }
 
 const cfgSym = { // internal usr config tag
     usrCfgCommitRules: Symbol.for('usrCfgCommitRules'),
-    defaultCommitRules: Symbol.for('defaultCommitRules'),
 }
 
 const helperSym = { // helper class private attr
-    fixSym: Symbol.for('helperFixSym'),
     cfgSym: Symbol.for('helperCfgSym'),
     cmdArgs: Symbol.for('helperCmdArgs'),
     usrHome: Symbol.for('helperUsrHome'),
-    initUsrCfg: Symbol.for('helperInitUsrCfg'),
-    findUsrCfgAttr: Symbol.for('helperFindUsrCfgAttr'),
+    getAttrVal: Symbol.for('Get configurable attribute'),
+    commitRulesT: Symbol.for('Commit rules user or default'),
 }
 
 const helper = new class {
@@ -152,64 +150,38 @@ const helper = new class {
         }
     }
 
-    [helperSym.findUsrCfgAttr](attr) {
-        const defCfgObj = tools.getModule('cfgInit');
-        if(!this.cfgObj) {
-            this.warnMsg('Config file missing, back to the default ones');
-            this.cfgObj = defCfgObj;
-        }
-
+    [helperSym.getAttrVal](attr) {
         switch(attr) {
             case cfgSym.usrCfgCommitRules:
                try {
-                    if(this.getUsrConfig(cfgSym.defaultCommitRules)) {
-                        return defCfgObj.attr.commitRules;;
-                    }
                     return this.cfgObj.attr.commitRules;
                 } catch(err) {
                     return {};
-                }
-            case cfgSym.defaultCommitRules:
-               try {
-                    return this.cfgObj.attr.commitRulesDefault;
-                } catch(err) {
-                    return false;
                 }
             default:
                 return false;
         }
     }
 
-    isDefautConfig() {
-        return this.getUsrConfig(cfgSym.defaultCommitRules);
-    }
-
     getUsrConfig(attr) {
-        if(this[helperSym.initUsrCfg]) {
-            return this[helperSym.findUsrCfgAttr](attr);
+        if(typeof(this[helperSym.commitRulesT]) != 'undefined') {
+            return this[helperSym.getAttrVal](attr);
         }
 
-        const cfgFile = path.join(tools.getUsrHome(fixSym.usrHome), fixSym.cfgFile);
+        const cfgFile = path.join(config.getUsrHome(), fixSym.cfgFile);
 
         try {
             fs.accessSync(cfgFile, fs.constants.R_OK);
-            this.cfgObj = require(cfgFile);
+            this.cfgObj = require(cfgFile); // user commit rules
+            this[helperSym.commitRulesT] = 'user';
         } catch(err) {
-            helper.warnMsg("File not exist '" + cfgFile + "'");
+            // user commit rules missing, back to the default ones
+            this.cfgObj = tools.getModule('cfgInit');
+            this[helperSym.commitRulesT] = 'default';
         }
 
-        this[helperSym.initUsrCfg] = true;
-        return this[helperSym.findUsrCfgAttr](attr);
+        return this[helperSym.getAttrVal](attr);
     };
-
-
-    set fixSym(value) {
-        this[helperSym.fixSym] = value;
-    }
-
-    get fixSym() {
-        return this[helperSym.fixSym];
-    }
 
     set cfgSym(value) {
         this[helperSym.cfgSym] = value;
@@ -240,10 +212,9 @@ exports.standardRelease = function standardRelease() {
     const cmdArgs = tools.getModule('cmdParser').argv;
     // console.debug(cmdArgs);
 
-    helper.fixSym = fixSym;
     helper.cfgSym = cfgSym;
     helper.cmdArgs = cmdArgs;
-    helper.usrHome = tools.getUsrHome(fixSym.usrHome);
+    helper.usrHome = config.getUsrHome();
 
     if(typeof(cmdArgs.init) != 'undefined') {
         tools.getModule('cfgInit').initUsrHome(helper, cmdArgs.init);

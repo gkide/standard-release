@@ -29,11 +29,11 @@ const initSuite = path.resolve(__dirname, 'init.js');
 require(initSuite).runTesting(standardRelease);
 
 // standard-release -m, use default configuration commit rules 
-const msgDefaultSuite = path.resolve(__dirname, 'message-default.js');
+const msgDefaultSuite = path.resolve(__dirname, 'commit-rules-def.js');
 require(msgDefaultSuite).runTesting(standardRelease);
 
 // standard-release -m, use custom configuration commit rules
-const msgCustomSuite = path.resolve(__dirname, 'message-custom.js');
+const msgCustomSuite = path.resolve(__dirname, 'commit-rules-usr.js');
 require(msgCustomSuite).runTesting(standardRelease);
 
 // standard-release --is-semver
