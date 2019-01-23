@@ -13,10 +13,6 @@ const chalk = require('chalk');
 const tools = require(path.join(__dirname, 'lib', 'tools'));
 const config = require(path.join(__dirname, 'lib', 'config'));
 
-const fixSym = {
-    cfgFile: "config.js",
-}
-
 const cfgSym = { // internal usr config tag
     usrCfgCommitRules: Symbol.for('usrCfgCommitRules'),
 }
@@ -168,11 +164,11 @@ const helper = new class {
             return this[helperSym.getAttrVal](attr);
         }
 
-        const cfgFile = path.join(config.getUsrHome(), fixSym.cfgFile);
+        const usrCommitRules = config.usrCommitHooks();
 
         try {
-            fs.accessSync(cfgFile, fs.constants.R_OK);
-            this.cfgObj = require(cfgFile); // user commit rules
+            fs.accessSync(usrCommitRules, fs.constants.R_OK);
+            this.cfgObj = require(usrCommitRules);
             this[helperSym.commitRulesT] = 'user';
         } catch(err) {
             // user commit rules missing, back to the default ones

@@ -61,7 +61,7 @@ function runTesting(standardRelease) {
                 + "        }\n"
                 + "    }\n"
                 + "}";
-            shell.exec('echo "' + usrConfigData + '" > .standard-release/config.js');
+            shell.exec('echo "' + usrConfigData + '" > .standard-release/commit.js');
         });
 
         afterEach(function() {
