@@ -1,5 +1,14 @@
 # standard-release
 
+![node-min-version](https://img.shields.io/node/v/v.svg)
+![npm-version](https://img.shields.io/npm/v/@gkide/standard-release.svg)
+![top-language-rate](https://img.shields.io/github/languages/top/gkide/standard-release.svg)
+![languages-count](https://img.shields.io/github/languages/count/gkide/standard-release.svg)
+![code-size](https://img.shields.io/github/languages/code-size/gkide/standard-release.svg)
+![downloads-count](https://img.shields.io/github/downloads/gkide/standard-release/total.svg)
+![open-issues](https://img.shields.io/github/issues/gkide/standard-release.svg)
+![open-pull-requests](https://img.shields.io/github/issues-pr/gkide/standard-release.svg)
+
 ## Init and Config
 
 `standard-release -i` will generated **.standard-release** directory.
