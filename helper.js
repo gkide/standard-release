@@ -13,7 +13,8 @@ const chalk = require('chalk');
 const tools = require(path.join(__dirname, 'lib', 'tools'));
 const config = require(path.join(__dirname, 'lib', 'config'));
 
-const helperSym = { // helper class private attr
+// helper class private attr
+const helperSym = {
     cmdArgs: Symbol.for('helperCmdArgs'),
     usrHome: Symbol.for('helperUsrHome'),
 }
