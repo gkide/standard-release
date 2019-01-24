@@ -21,7 +21,7 @@ function cleanTmpRepo() {
 }
 
 function runTestingAsync() {
-    describe('package: semver git tags(async)', () => {
+    describe('package: semver git tags, async API', () => {
         before(initTmpRepo);
         after(cleanTmpRepo);
 
@@ -182,7 +182,7 @@ function runTestingAsync() {
 }
 
 function runTestingSync() {
-    describe('package: semver git tags(sync)', () => {
+    describe('package: semver git tags, sync API', () => {
         before(initTmpRepo);
         after(cleanTmpRepo);
 

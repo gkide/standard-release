@@ -3,7 +3,7 @@
 const chai = require('chai');
 
 function runTesting(standardRelease) {
-    describe('standard-release --init', function() {
+    describe('standard-release --is-semver', function() {
         it("OK  [1.2.3]", function() {
             let ret = standardRelease('--is-semver 1.2.3');
             chai.expect(ret.code).to.equal(0);

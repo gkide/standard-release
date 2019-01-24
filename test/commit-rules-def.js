@@ -7,15 +7,15 @@ const shell = require('shelljs');
 
 function runTesting(standardRelease) {
     const workingDirectory = path.resolve(__dirname, '..', 'tmp');
-    describe('standard-release --message', function() {
-        beforeEach(function() {
+    describe('standard-release --message, default rules', function() {
+        before(function() {
             shell.rm('-rf', 'tmp');
             shell.mkdir('tmp');
             shell.cd('tmp');
             shell.exec('git init');
             standardRelease('-i');
         });
-        afterEach(function() {
+        after(function() {
             shell.cd('../');
             shell.rm('-rf', 'tmp');
         });
@@ -29,11 +29,16 @@ function runTesting(standardRelease) {
             return fs.readFileSync(commitMsgFile, 'utf8');
         }
 
+        const EMSG_InfoMerge = 'INFO: Merge commit detected, skip.\n';
+        const EMSG_failOnAutoFix = "ERROR: Abort for fail on warnings\n";
+        const EMSG_headerMsgEmpty = 'ERROR: Aborting commit due to empty <header> message.\n';
+        const EMSG_CommitFormat = 'ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n';
+
         it('Merge branch plugins', function() {
             const commitMsg = 'Merge branch plugins';
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.equal('INFO: Merge commit detected, skip.\n');
+            chai.expect(ret.stdout).to.equal(EMSG_InfoMerge);
             chai.expect(ret.stderr).to.empty;
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
@@ -44,7 +49,7 @@ function runTesting(standardRelease) {
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.equal('INFO: Merge commit detected, skip.\n');
+            chai.expect(ret.stdout).to.equal(EMSG_InfoMerge);
             chai.expect(ret.stderr).to.empty;
 
             ret = standardRelease('-x -m ' + commitMsgFile);
@@ -60,23 +65,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -86,23 +91,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -112,23 +117,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -138,23 +143,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -164,23 +169,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -190,23 +195,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -216,23 +221,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -269,25 +274,25 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: Autofix <scope>: API => api\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: Autofix <scope>: API => api\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
         });
 
@@ -296,23 +301,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -322,23 +327,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -348,23 +353,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -374,23 +379,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -400,23 +405,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -426,23 +431,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -452,23 +457,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -478,23 +483,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -504,23 +509,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -530,23 +535,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -556,23 +561,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -582,23 +587,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: ' + commitMsg + '\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Do NOT match format: "<type>(<scope>): <subject>"\n');
+            chai.expect(ret.stderr).to.equal(EMSG_CommitFormat);
 
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
@@ -609,25 +614,25 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: Autofix <subject>: Start upper case => start upper case\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal('INFO: Autofix <subject>: Start upper case => start upper case\n');
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
@@ -641,23 +646,23 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Aborting commit due to empty <header> message.\n');
+            chai.expect(ret.stderr).to.equal(EMSG_headerMsgEmpty);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Aborting commit due to empty <header> message.\n');
+            chai.expect(ret.stderr).to.equal(EMSG_headerMsgEmpty);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Aborting commit due to empty <header> message.\n');
+            chai.expect(ret.stderr).to.equal(EMSG_headerMsgEmpty);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Aborting commit due to empty <header> message.\n');
+            chai.expect(ret.stderr).to.equal(EMSG_headerMsgEmpty);
         });
 
         it('invalid header type', function() {
@@ -696,25 +701,25 @@ function runTesting(standardRelease) {
             let stdoutMsg = 'INFO: Autofix <type>: buIld => build\n'
                 + 'INFO: Autofix <subject>: Start upper case => start upper case\n';
             chai.expect(ret.stdout).to.equal(stdoutMsg);
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal(stdoutMsg);
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
@@ -732,25 +737,25 @@ function runTesting(standardRelease) {
                 + 'INFO: Autofix <scope>: API => api\n'
                 + 'INFO: Autofix <subject>: Start upper case => start upper case\n';
             chai.expect(ret.stdout).to.equal(stdoutMsg);
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal(stdoutMsg);
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
 
             ret = standardRelease('-x -m ' + commitMsgFile);
@@ -768,25 +773,25 @@ function runTesting(standardRelease) {
                 + 'INFO: Autofix <scope>: API|Network => api|network\n'
                 + 'INFO: Autofix <subject>: Start upper case => start upper case\n';
             chai.expect(ret.stdout).to.equal(stdoutMsg);
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal(stdoutMsg);
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: Abort for fail on warnings\n');
+            chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
             chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
 
             ret = standardRelease('-x -m ' + commitMsgFile);

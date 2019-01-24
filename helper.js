@@ -75,6 +75,13 @@ const helper = new class {
         return /(\s*)/g.test(str);
     }
 
+    debugMsg(msgId, obj) {
+        if(this.cmdArgs.dev) {
+            console.log("------------- " + msgId + " -------------");
+            console.log(obj);
+        }
+    }
+
     logMsg(msg) { // stdout
         if(!this.cmdArgs.silent) {
             console.log("%s: %s", chalk.blue('LOG'), msg);

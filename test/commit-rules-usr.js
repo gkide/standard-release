@@ -5,66 +5,86 @@ const path = require('path');
 const chai = require('chai');
 const shell = require('shelljs');
 
-function runTesting(standardRelease) {
+// user commit rules header, body, footer hooks
+const usrCR_HBF =  "    header: {\n"
+    + "        maxLength: 100,\n"
+    + "        type: [\n"
+    + "            { skip: false, isFilter: true, name: 'typea' },\n"
+    + "            { skip: false, isFilter: true, name: 'typeb' },\n"
+    + "        ],\n"
+    + "        scope: function(scopeMsg) {\n"
+    + "            if(scopeMsg == 'ok') {\n"
+    + "                return { ok: true };\n"
+    + "            } else if(scopeMsg == 'autofix') {\n"
+    + "                return { ok: true, autofix: 'newScopeMsg' };\n"
+    + "            } else {\n"
+    + "                return { ok: false, emsg: 'ScopeInvalid' };\n"
+    + "            }\n"
+    + "        },\n"
+    + "        subject: function(subjectMsg) {\n"
+    + "            if(subjectMsg == 'ok') {\n"
+    + "                return { ok: true };\n"
+    + "            } else if(subjectMsg == 'autofix') {\n"
+    + "                return { ok: true, autofix: 'newSubjectMsg' };\n"
+    + "            } else {\n"
+    + "                return { ok: false, emsg: 'SubjectInvalid' };\n"
+    + "            }\n"
+    + "        },\n"
+    + "    },"
+    + "    body: function(bodyMsg) {\n"
+    + "        if(bodyMsg == 'ok') {\n"
+    + "            return { ok: true };\n"
+    + "        } else if(bodyMsg == 'autofix') {\n"
+    + "            return { ok: true, autofix: 'newBodyMsg' };\n"
+    + "        } else {\n"
+    + "            return { ok: false, emsg: 'BodyInvalid' };\n"
+    + "        }\n"
+    + "    },\n"
+    + "    footer: function(footerMsg) {\n"
+    + "        if(footerMsg == 'ok') {\n"
+    + "            return { ok: true };\n"
+    + "        } else if(footerMsg == 'autofix') {\n"
+    + "            return { ok: true, autofix: 'newFooterMsg' };\n"
+    + "        } else {\n"
+    + "            return { ok: false, emsg: 'FooterInvalid' };\n"
+    + "        }\n"
+    + "    }\n";
+
+function writeUsrCommitRulesF() {
+    const usrCommitRulesF = "exports.commitRules = {\n"
+        + "    failOnAutoFix: false,\n"
+        + usrCR_HBF
+        + "}";
+    shell.exec('echo "' + usrCommitRulesF + '" > .standard-release/commit.js');
+}
+
+function writeUsrCommitRulesT() {
+    const usrCommitRulesF = "exports.commitRules = {\n"
+        + "    failOnAutoFix: true,\n"
+        + usrCR_HBF
+        + "}";
+    shell.exec('echo "' + usrCommitRulesF + '" > .standard-release/commit.js');
+}
+
+function run(standardRelease, usrCommitRulesGenerator, failOnAutoFix) {
     const workingDirectory = path.resolve(__dirname, '..', 'tmp');
-    describe('standard-release --message(usr config)', function() {
-        beforeEach(function() {
+    let prmptMsg
+    if(failOnAutoFix) {
+        prmptMsg = 'usr rules, fail-on-auto-fix=true';
+    } else {
+        prmptMsg = 'usr rules, fail-on-auto-fix=false';
+    }
+    describe('standard-release --message, ' + prmptMsg, function() {
+        before(function() {
             shell.rm('-rf', 'tmp');
             shell.mkdir('tmp');
             shell.cd('tmp');
             shell.exec('git init');
             standardRelease('-i');
-            const usrConfigData = "exports.attr = {\n"
-                + "    commitRules: {\n"
-                + "        header: {\n"
-                + "            maxLength: 100,\n"
-                + "            type: [\n"
-                + "                { skip: false, isFilter: true, name: 'typea' },\n"
-                + "                { skip: false, isFilter: true, name: 'typeb' },\n"
-                + "            ],\n"
-                + "            scope: function(scopeMsg) {\n"
-                + "                if(scopeMsg == 'ok') {\n"
-                + "                    return { ok: true };\n"
-                + "                } else if(scopeMsg == 'autofix') {\n"
-                + "                    return { ok: true, autofix: 'newScopeMsg' };\n"
-                + "                } else {\n"
-                + "                    return { ok: false, emsg: 'ScopeInvalid' };\n"
-                + "                }\n"
-                + "            },\n"
-                + "            subject: function(subjectMsg) {\n"
-                + "                if(subjectMsg == 'ok') {\n"
-                + "                    return { ok: true };\n"
-                + "                } else if(subjectMsg == 'autofix') {\n"
-                + "                    return { ok: true, autofix: 'newSubjectMsg' };\n"
-                + "                } else {\n"
-                + "                    return { ok: false, emsg: 'SubjectInvalid' };\n"
-                + "                }\n"
-                + "            },\n"
-                + "        },\n"
-                + "        body: function(bodyMsg) {\n"
-                + "            if(bodyMsg == 'ok') {\n"
-                + "                return { ok: true };\n"
-                + "            } else if(bodyMsg == 'autofix') {\n"
-                + "                return { ok: true, autofix: 'newBodyMsg' };\n"
-                + "            } else {\n"
-                + "                return { ok: false, emsg: 'BodyInvalid' };\n"
-                + "            }\n"
-                + "        },\n"
-                + "        footer: function(footerMsg) {\n"
-                + "            if(footerMsg == 'ok') {\n"
-                + "                return { ok: true };\n"
-                + "            } else if(footerMsg == 'autofix') {\n"
-                + "                return { ok: true, autofix: 'newFooterMsg' };\n"
-                + "            } else {\n"
-                + "                return { ok: false, emsg: 'FooterInvalid' };\n"
-                + "            }\n"
-                + "        }\n"
-                + "    }\n"
-                + "}";
-            shell.exec('echo "' + usrConfigData + '" > .standard-release/commit.js');
+            usrCommitRulesGenerator();
         });
 
-        afterEach(function() {
+        after(function() {
             shell.cd('../');
             shell.rm('-rf', 'tmp');
         });
@@ -78,19 +98,26 @@ function runTesting(standardRelease) {
             return fs.readFileSync(commitMsgFile, 'utf8');
         }
 
+        const EMSG_failOnAutoFix = "ERROR: Abort for fail on warnings\n";
+        const EMSG_headerTypes = "ERROR: 'invalid' not valid types of: typea, typeb\n";
+        const EMSG_headerLength = "ERROR: Header is longer than 100 chars\n";
+        const EMSG_SubjectInvalid = "ERROR: <subject> invalid because SubjectInvalid\n";
+        const EMSG_bodyInvalid = "ERROR: <body> invalid because BodyInvalid\n";
+        const EMSG_footerInvalid = "ERROR: <footer> invalid because FooterInvalid\n";
+
         it('invalid type', function() {
             const commitMsg = 'invalid: invalid type';
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
-            const stderrMsg = "ERROR: 'invalid' not valid types of: typea, typeb\n";
+
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal(stderrMsg);
+            chai.expect(ret.stderr).to.equal(EMSG_headerTypes);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal(stderrMsg);
+            chai.expect(ret.stderr).to.equal(EMSG_headerTypes);
         });
 
         it('valid commit', function() {
@@ -110,118 +137,166 @@ function runTesting(standardRelease) {
 
         it('scope autofix', function() {
             const commitMsg = 'typea(autofix): ok\n\nok\n\nok';
-            const autoFixedMsg = 'typea(newScopeMsg): ok\n\nok\n\nok';
             const data = shell.exec('echo -n "' + commitMsg + '"');
             let ret = standardRelease('-m "' + data.stdout + '"');
-            chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.empty;
+            if(failOnAutoFix) {
+                chai.expect(ret.code).to.equal(1);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
+            } else {
+                chai.expect(ret.code).to.equal(0);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.empty;
+            }
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
-            chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.empty;
-            chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
+            if(failOnAutoFix) {
+                chai.expect(ret.code).to.equal(1);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
+            } else {
+                chai.expect(ret.code).to.equal(0);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.empty;
+                const autoFixedMsg = 'typea(newScopeMsg): ok\n\nok\n\nok';
+                chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
+            }
         });
 
-        it('subject error', function() {
+        it('subject invalid', function() {
             const commitMsg = 'typea(autofix): error\n\nok\n\nok';
             const data = shell.exec('echo -n "' + commitMsg + '"');
             let ret = standardRelease('-m "' + data.stdout + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: <subject> invalid because SubjectInvalid\n');
+            chai.expect(ret.stderr).to.equal(EMSG_SubjectInvalid);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: <subject> invalid because SubjectInvalid\n');
+            chai.expect(ret.stderr).to.equal(EMSG_SubjectInvalid);
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
 
-        it('body error', function() {
+        it('body invalid', function() {
             const commitMsg = 'typea(autofix): ok\n\nerror\n\nok';
             const data = shell.exec('echo -n "' + commitMsg + '"');
             let ret = standardRelease('-m "' + data.stdout + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: <body> invalid because BodyInvalid\n');
+            chai.expect(ret.stderr).to.equal(EMSG_bodyInvalid);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: <body> invalid because BodyInvalid\n');
+            chai.expect(ret.stderr).to.equal(EMSG_bodyInvalid);
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
 
-        it('footer error', function() {
+        it('footer invalid', function() {
             const commitMsg = 'typea(autofix): ok\n\nok\n\nerror';
             const data = shell.exec('echo -n "' + commitMsg + '"');
             let ret = standardRelease('-m "' + data.stdout + '"');
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: <footer> invalid because FooterInvalid\n');
+            chai.expect(ret.stderr).to.equal(EMSG_footerInvalid);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal('ERROR: <footer> invalid because FooterInvalid\n');
+            chai.expect(ret.stderr).to.equal(EMSG_footerInvalid);
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
         });
 
         it('subject autofix', function() {
             const commitMsg = 'typea(autofix): autofix\n\nok\n\nok';
-            const autoFixedMsg = 'typea(newScopeMsg): newSubjectMsg\n\nok\n\nok';
             const data = shell.exec('echo -n "' + commitMsg + '"');
             let ret = standardRelease('-m "' + data.stdout + '"');
-            chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.empty;
+            if(failOnAutoFix) {
+                chai.expect(ret.code).to.equal(1);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
+            } else {
+                chai.expect(ret.code).to.equal(0);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.empty;
+            }
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
-            chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.empty;
-            chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
+            if(failOnAutoFix) {
+                chai.expect(ret.code).to.equal(1);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
+            } else {
+                chai.expect(ret.code).to.equal(0);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.empty;
+                const autoFixedMsg = 'typea(newScopeMsg): newSubjectMsg\n\nok\n\nok';
+                chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
+            }
         });
 
         it('body autofix', function() {
             const commitMsg = 'typea(autofix): autofix\n\nautofix\n\nok';
-            const autoFixedMsg = 'typea(newScopeMsg): newSubjectMsg\n\nnewBodyMsg\n\nok';
             const data = shell.exec('echo -n "' + commitMsg + '"');
             let ret = standardRelease('-m "' + data.stdout + '"');
-            chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.empty;
+            if(failOnAutoFix) {
+                chai.expect(ret.code).to.equal(1);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
+            } else {
+                chai.expect(ret.code).to.equal(0);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.empty;
+            }
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
-            chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.empty;
-            chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
+            if(failOnAutoFix) {
+                chai.expect(ret.code).to.equal(1);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
+            } else {
+                chai.expect(ret.code).to.equal(0);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.empty;
+                const autoFixedMsg = 'typea(newScopeMsg): newSubjectMsg\n\nnewBodyMsg\n\nok';
+                chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
+            }
         });
 
         it('footer autofix', function() {
             const commitMsg = 'typea(autofix): autofix\n\nautofix\n\nautofix';
-            const autoFixedMsg = 'typea(newScopeMsg): newSubjectMsg\n\nnewBodyMsg\n\nnewFooterMsg';
             const data = shell.exec('echo -n "' + commitMsg + '"');
             let ret = standardRelease('-m "' + data.stdout + '"');
-            chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.empty;
+            if(failOnAutoFix) {
+                chai.expect(ret.code).to.equal(1);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
+            } else {
+                chai.expect(ret.code).to.equal(0);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.empty;
+            }
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
-            chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.empty;
-            chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
+            if(failOnAutoFix) {
+                chai.expect(ret.code).to.equal(1);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.equal(EMSG_failOnAutoFix);
+            } else {
+                chai.expect(ret.code).to.equal(0);
+                chai.expect(ret.stdout).to.empty;
+                chai.expect(ret.stderr).to.empty;
+                const autoFixedMsg = 'typea(newScopeMsg): newSubjectMsg\n\nnewBodyMsg\n\nnewFooterMsg';
+                chai.expect(readCommitMsgFromFile()).to.equal(autoFixedMsg);
+            }
         });
 
         it('Merge branch plugins', function() {
@@ -256,17 +331,21 @@ function runTesting(standardRelease) {
                 + 'long header message more then 100 characters';
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
-            let stderrMsg = "ERROR: Header is longer than 100 chars\n";
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal(stderrMsg);
+            chai.expect(ret.stderr).to.equal(EMSG_headerLength);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.empty;
-            chai.expect(ret.stderr).to.equal(stderrMsg);
+            chai.expect(ret.stderr).to.equal(EMSG_headerLength);
         });
     });
+}
+
+function runTesting(standardRelease) {
+    run(standardRelease, writeUsrCommitRulesT, true);
+    run(standardRelease, writeUsrCommitRulesF, false);
 }
 
 exports.runTesting = runTesting;
