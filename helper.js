@@ -13,16 +13,9 @@ const chalk = require('chalk');
 const tools = require(path.join(__dirname, 'lib', 'tools'));
 const config = require(path.join(__dirname, 'lib', 'config'));
 
-const cfgSym = { // internal usr config tag
-    usrCfgCommitRules: Symbol.for('usrCfgCommitRules'),
-}
-
 const helperSym = { // helper class private attr
-    cfgSym: Symbol.for('helperCfgSym'),
     cmdArgs: Symbol.for('helperCmdArgs'),
     usrHome: Symbol.for('helperUsrHome'),
-    getAttrVal: Symbol.for('Get configurable attribute'),
-    commitRulesT: Symbol.for('Commit rules user or default'),
 }
 
 const helper = new class {
@@ -146,47 +139,6 @@ const helper = new class {
         }
     }
 
-    [helperSym.getAttrVal](attr) {
-        switch(attr) {
-            case cfgSym.usrCfgCommitRules:
-               try {
-                    return this.cfgObj.attr.commitRules;
-                } catch(err) {
-                    return {};
-                }
-            default:
-                return false;
-        }
-    }
-
-    getUsrConfig(attr) {
-        if(typeof(this[helperSym.commitRulesT]) != 'undefined') {
-            return this[helperSym.getAttrVal](attr);
-        }
-
-        const usrCommitRules = config.usrCommitHooks();
-
-        try {
-            fs.accessSync(usrCommitRules, fs.constants.R_OK);
-            this.cfgObj = require(usrCommitRules);
-            this[helperSym.commitRulesT] = 'user';
-        } catch(err) {
-            // user commit rules missing, back to the default ones
-            this.cfgObj = tools.getModule('doInit');
-            this[helperSym.commitRulesT] = 'default';
-        }
-
-        return this[helperSym.getAttrVal](attr);
-    };
-
-    set cfgSym(value) {
-        this[helperSym.cfgSym] = value;
-    }
-
-    get cfgSym() {
-        return this[helperSym.cfgSym];
-    }
-
     set cmdArgs(value) {
         this[helperSym.cmdArgs] = value;
     }
@@ -208,7 +160,6 @@ exports.standardRelease = function standardRelease() {
     const cmdArgs = tools.getModule('cmdParser').argv;
     // console.debug(cmdArgs);
 
-    helper.cfgSym = cfgSym;
     helper.cmdArgs = cmdArgs;
     helper.usrHome = config.getUsrHome();
 

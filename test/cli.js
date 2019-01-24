@@ -1,11 +1,15 @@
 'use strict';
 
+// Native
 const path = require('path');
 const stream = require('stream');
+
+// Packages
+const chai = require('chai');
 const semver = require('semver');
 const shell = require('shelljs');
-const chai = require('chai');
 
+// Utilities
 const cliPath = path.resolve(__dirname, '..', 'bin', 'cli.js');
 
 function standardRelease(argString) {
