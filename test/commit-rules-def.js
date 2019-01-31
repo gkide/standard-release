@@ -670,8 +670,13 @@ function runTesting(standardRelease) {
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
             const stderrMsg = "ERROR: 'invalid' not valid types of: "
-                + 'major, break, breaking, minor, feat, feature, patch, fix, bugfix, '
-                + 'ci, docs, perf, test, style, build, chore, revert, refactor\n';
+                + 'major, break, breaking, security, deprecated, '
+                + 'minor, feat, feature, '
+                + 'patch, fix, bugfix, '
+                + 'perf, revert, refactor, '
+                + 'build, deps, '
+                + 'wip, preview, '
+                + 'ci, docs, test, style, chore\n';
             chai.expect(ret.stdout).to.empty;
             chai.expect(ret.stderr).to.equal(stderrMsg);
 
@@ -817,12 +822,12 @@ function runTesting(standardRelease) {
             chai.expect(ret.stderr).to.equal(stderrMsg);
         });
 
-        it('skip Working In Processing(wip)', function() {
+        it('Working In Processing(wip/preview)', function() {
             const commitMsg = 'wip: subject\n\nboddy\n\n';
             const data = shell.exec('echo -n "' + commitMsg + '"');
             let ret = standardRelease('-m "' + data.stdout + '"');
             chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.equal('INFO: Commit message validation ignored for wip\n');
+            chai.expect(ret.stdout).to.empty;
             chai.expect(ret.stderr).to.empty;
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
@@ -833,7 +838,36 @@ function runTesting(standardRelease) {
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.equal('INFO: Commit message validation ignored for wip\n');
+            chai.expect(ret.stdout).to.empty;
+            chai.expect(ret.stderr).to.empty;
+            chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
+
+            writeCommitMsgToFile(commitMsg);
+            ret = standardRelease('-x -m ' + commitMsgFile);
+            chai.expect(ret.code).to.equal(0);
+            chai.expect(ret.stdout).to.empty;
+            chai.expect(ret.stderr).to.empty;
+            chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
+        });
+
+        it('Skip commit style checking for some reason', function() {
+            const skipMsg = 'INFO: Commit message validation ignored for skip\n';
+            const commitMsg = 'skip: subject\n\nboddy\n\n';
+            const data = shell.exec('echo -n "' + commitMsg + '"');
+            let ret = standardRelease('-m "' + data.stdout + '"');
+            chai.expect(ret.code).to.equal(0);
+            chai.expect(ret.stdout).to.equal(skipMsg);
+            chai.expect(ret.stderr).to.empty;
+
+            ret = standardRelease('-x -m "' + commitMsg + '"');
+            chai.expect(ret.code).to.equal(0);
+            chai.expect(ret.stdout).to.empty;
+            chai.expect(ret.stderr).to.empty;
+
+            writeCommitMsgToFile(commitMsg);
+            ret = standardRelease('-m ' + commitMsgFile);
+            chai.expect(ret.code).to.equal(0);
+            chai.expect(ret.stdout).to.equal(skipMsg);
             chai.expect(ret.stderr).to.empty;
             chai.expect(readCommitMsgFromFile()).to.equal(commitMsg);
 
