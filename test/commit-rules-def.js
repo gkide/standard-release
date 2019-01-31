@@ -672,7 +672,7 @@ function runTesting(standardRelease) {
             const stderrMsg = "ERROR: 'invalid' not valid types of: "
                 + 'major, break, breaking, security, deprecated, '
                 + 'minor, feat, feature, '
-                + 'patch, fix, bugfix, '
+                + 'fix, patch, bugfix, '
                 + 'perf, revert, refactor, '
                 + 'build, deps, '
                 + 'wip, preview, '

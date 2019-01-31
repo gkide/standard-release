@@ -78,7 +78,7 @@ const helper = new class {
 
     debugMsg(msgId, obj) {
         if(this.cmdArgs.dev) {
-            console.log("------------- " + msgId + " -------------");
+            console.log("============= " + msgId + " =============");
             console.log(obj);
         }
     }
