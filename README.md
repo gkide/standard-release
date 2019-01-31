@@ -41,19 +41,46 @@ the default settings.
 
 ### `<type>` should be one of
 
-- `fix` A bug fix
-- `feat` Introduce or modify the codebase features
-- `break` User interface breaking changes
-- `ci` CI configuration changes
-- `docs` Documentation changes
-- `test` Adding new or correcting existing tests
-- `build` Changes that do affect the build system
-- `perf` Code changes that improves the performance
-- `style` Changes that do not affect the code meaning
-- `chore` Other changes that don't modify src or test files
-- `revert` Revert a previous commit
-- `refactor` Changes that neither fixes a bug nor adds a feature
-- `wip` Something which is working in process
+> Version Major
+
+- **Incompatible**: `major` for explicit bump major verion.
+- **Incompatible**: `break` for make any incompatible changes.
+- **Incompatible**: `breaking` for make any incompatible changes.
+- **Security**: `security` for anything related with vulnerabilities and security.
+- **Deprecated**: `deprecated` for functionality or API which are soon-to-be removed.
+
+> Version Minor
+
+- **Features**: `minor` for explicit bump minor verion.
+- **Features**: `feat` for new or modify features in backwards-compatible manner.
+- **Features**: `feature` for new or modify features in backwards-compatible manner.
+
+> Version Patch
+
+- **Fixed**: `fix` for any bug fixes.
+- **Fixed**: `patch` for any bug fixes.
+- **Fixed**: `bugfix` for any bug fixes.
+
+> Version Tweak
+
+- **Changed**: `perf` for changes that improves the performance.
+- **Changed**: `revert` for revert to a previous commit.
+- **Changed**: `refactor` for neither bugfix nor feature changes.
+
+- **Preview**: `wip` for something which is working in process or perview.
+- **Preview**: `preview` for something which is working in process or perview.
+
+- **Dependencies**: `deps` for any external dependencies changes.
+- **Dependencies**: `build` for changes that affect the build system.
+
+> Version Unrelated
+
+- `ci` CI configuration changes.
+- `docs` Documentation changes.
+- `test` Adding new or correcting existing tests.
+- `style` Changes that do not affect the code meaning.
+- `chore` Other changes that don't modify src or test files.
+- `skip` Skip commit style checking for some reason.
 
 ### `<scope>` is optional
 
