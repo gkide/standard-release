@@ -29,7 +29,6 @@
     },
     "scripts": {
         "test": "mocha --timeout=5000 test/all.js",
-        "test-list": "mocha --timeout=5000 test/all.js",
         "testInit": "mocha --timeout=5000 test/init.js",
         "testMygit": "mocha --timeout=5000 test/mygit.js",
         "testIsSemver": "mocha --timeout=5000 test/is-semver.js",
