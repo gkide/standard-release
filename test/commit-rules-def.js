@@ -1,9 +1,15 @@
 'use strict';
 
+// Native
 const fs = require('fs');
 const path = require('path');
+
+// Packages
 const chai = require('chai');
 const shell = require('shelljs');
+
+// Utilities
+const config = require(path.resolve(__dirname, 'config.js'));
 
 function runTesting(standardRelease) {
     const workingDirectory = path.resolve(__dirname, '..', 'tmp');
@@ -1085,4 +1091,4 @@ function runTesting(standardRelease) {
     });
 }
 
-exports.runTesting = runTesting;
+runTesting(config.standardRelease);

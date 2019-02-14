@@ -1,12 +1,17 @@
 'use strict';
 
+// Native
 const fs = require('fs');
 const path = require('path');
+
+// Packages
 const chai = require('chai');
 const shell = require('shelljs');
 
-const gitTags = require(path.resolve(__dirname, '..', '..', 'lib', 'myGit'));
-const mySemVer = require(path.resolve(__dirname, '..', '..', 'lib', 'mySemVer'));
+// Utilities
+const config = require(path.resolve(__dirname, 'config.js'));
+const gitTags = require(path.resolve(__dirname, '..', 'lib', 'myGit'));
+const mySemVer = require(path.resolve(__dirname, '..', 'lib', 'mySemVer'));
 
 function initTmpRepo() {
     shell.rm('-rf', 'tmp');
@@ -327,4 +332,4 @@ function runTesting() {
     runTestingSync();
 }
 
-exports.runTesting = runTesting;
+runTesting(config.standardRelease);

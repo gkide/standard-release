@@ -1,8 +1,14 @@
 'use strict';
 
+// Native
 const path = require('path');
+
+// Packages
 const chai = require('chai');
 const shell = require('shelljs');
+
+// Utilities
+const config = require(path.resolve(__dirname, 'config.js'));
 
 function runTesting(standardRelease) {
     // out of the source tree
@@ -65,4 +71,4 @@ function runTesting(standardRelease) {
     });
 }
 
-exports.runTesting = runTesting;
+runTesting(config.standardRelease);

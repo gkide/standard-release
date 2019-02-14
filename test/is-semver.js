@@ -1,6 +1,13 @@
 'use strict';
 
+// Native
+const path = require('path');
+
+// Packages
 const chai = require('chai');
+
+// Utilities
+const config = require(path.resolve(__dirname, 'config.js'));
 
 function runTesting(standardRelease) {
     describe('standard-release --is-semver', function() {
@@ -175,4 +182,4 @@ function runTesting(standardRelease) {
     });
 }
 
-exports.runTesting = runTesting;
+runTesting(config.standardRelease);

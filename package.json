@@ -28,8 +28,13 @@
         "url": "git+https://github.com/gkide/standard-release.git"
     },
     "scripts": {
-        "test": "mocha --timeout=5000 test/cli.js",
-        "dev-test": "mocha --timeout=5000 todo/test.js"
+        "test": "mocha --timeout=5000 test/all.js",
+        "test-list": "mocha --timeout=5000 test/all.js",
+        "testInit": "mocha --timeout=5000 test/init.js",
+        "testMygit": "mocha --timeout=5000 test/mygit.js",
+        "testIsSemver": "mocha --timeout=5000 test/is-semver.js",
+        "testCommitRuleDef": "mocha --timeout=5000 test/commit-rules-def.js",
+        "testCommitRuleUsr": "mocha --timeout=5000 test/commit-rules-usr.js"
     },
     "files": [
         "bin/*",

@@ -1,9 +1,15 @@
 'use strict';
 
+// Native
 const fs = require('fs');
 const path = require('path');
+
+// Packages
 const chai = require('chai');
 const shell = require('shelljs');
+
+// Utilities
+const config = require(path.resolve(__dirname, 'config.js'));
 
 // user commit rules header, body, footer hooks
 const usrCR_HBF =  "    header: {\n"
@@ -348,4 +354,4 @@ function runTesting(standardRelease) {
     run(standardRelease, writeUsrCommitRulesF, false);
 }
 
-exports.runTesting = runTesting;
+runTesting(config.standardRelease);
