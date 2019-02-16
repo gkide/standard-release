@@ -1,49 +1,60 @@
 # Change Log
-ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 
-## Release [v0.1.3-rc.1](https://github.com/gkide/standard-release/releases/tag/v0.1.3-rc.1)
+- ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
+- PROJECT VERSIONS ADHERE TO [SEMANTIC VERSIONING](http://semver.org).
+- REPOSITORY COMMITS ADHERE TO [CONVENTIONAL COMMITS](https://conventionalcommits.org).
 
+
+## [Unreleased]
+### ☕ Features
+### ☠ Security
+### ⛨ Fixed
+### ⚒ Changed
+### ⚑ Preview
+### ⚠ Deprecated
+### ⛔ Incompatible
+### ☂ Dependencies
+
+
+## 2019-01-05 Release [v0.1.3-rc.1](https://github.com/gkide/standard-release/releases/tag/v0.1.3-rc.1)
 ### BugFixes
 - fix: cmd args no default & reasonal & readable, auto creat not error ([47b7128](https://github.com/gkide/standard-release/commit/47b7128))
 
-## Release [v0.1.2](https://github.com/gkide/standard-release/releases/tag/v0.1.2)
 
+## 2019-01-03 Release [v0.1.2](https://github.com/gkide/standard-release/releases/tag/v0.1.2)
 ### Style
 - style: WIP => wip ([71b8c52](https://github.com/gkide/standard-release/commit/12383b2))
-
-## Release [v0.1.1](https://github.com/gkide/standard-release/releases/tag/v0.1.1)
-
 ### BugFixes
 - fix: commit object parse ([71b8c52](https://github.com/gkide/standard-release/commit/71b8c52))
 
-## Release [v0.1.0](https://github.com/gkide/standard-release/releases/tag/v0.1.0)
 
+## 2018-11-21 Release [v0.1.0](https://github.com/gkide/standard-release/releases/tag/v0.1.0)
 ### Features
 - feat: check if it is a semver ([c8e9c7c](https://github.com/gkide/standard-release/commit/c8e9c7c))
 
-## Release [v0.0.6](https://github.com/gkide/standard-release/releases/tag/v0.0.6)
 
+## 2018-11-20 Release [v0.0.6](https://github.com/gkide/standard-release/releases/tag/v0.0.6)
 ### BugFixes
 - fix: stupid init bugs ([20273bb](https://github.com/gkide/standard-release/commit/20273bb))
 
-## Release [v0.0.5](https://github.com/gkide/standard-release/releases/tag/v0.0.5)
 
+## 2018-11-17 Release [v0.0.5](https://github.com/gkide/standard-release/releases/tag/v0.0.5)
 ### BugFixes
 - fix: default footer checking & testing ([1359a7b](https://github.com/gkide/standard-release/commit/1359a7b))
 
-## Release [v0.0.4](https://github.com/gkide/standard-release/releases/tag/v0.0.4)
 
+## 2018-11-17 Release [v0.0.4](https://github.com/gkide/standard-release/releases/tag/v0.0.4)
 ### BugFixes
 - fix: default footer checking invalid line ([42d7358](https://github.com/gkide/standard-release/commit/42d7358))
 
-## Release [v0.0.3](https://github.com/gkide/standard-release/releases/tag/v0.0.3)
 
+## 2018-11-17 Release [v0.0.3](https://github.com/gkide/standard-release/releases/tag/v0.0.3)
 ### BugFixes
 - fix: changlog update from latest tag to HEAD ([4094e42](https://github.com/gkide/standard-release/commit/4094e42))
 - fix: skip # comments lines for header/body/footer ([d4d7507](https://github.com/gkide/standard-release/commit/d4d7507))
 
-## Release [v0.0.2](https://github.com/gkide/standard-release/releases/tag/v0.0.2)
 
+## 2018-11-17 Release [v0.0.2](https://github.com/gkide/standard-release/releases/tag/v0.0.2)
 ### Features
 - feat: changelog automatic updating init ([47eeff1](https://github.com/gkide/standard-release/commit/47eeff1))
 - feat: init add example file for semver.js ([3cbb87b](https://github.com/gkide/standard-release/commit/3cbb87b))
@@ -60,7 +71,6 @@ ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.
 - feature: init command: --init, -i ([e70c0c9](https://github.com/gkide/standard-release/commit/e70c0c9))
 - feature: valid commit message init ([085c053](https://github.com/gkide/standard-release/commit/085c053))
 - feature: init user interface ([fd3ff46](https://github.com/gkide/standard-release/commit/fd3ff46))
-
 ### BugFixes
 - fix: skip signed-off-by for checking footer ([7a640e5](https://github.com/gkide/standard-release/commit/7a640e5))
 - fix: git raw commit data ([18e5684](https://github.com/gkide/standard-release/commit/18e5684))
