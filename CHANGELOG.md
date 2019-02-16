@@ -6,6 +6,12 @@
 
 
 ## [Unreleased]
+### ☣ Incompatible
+- **config**: refactor the config file to make it more clear
+- **config**: new add config file `.standard-release/spec.changelog.js`
+- **config**: `.standard-release/commit.example.js` => `.standard-release/spec.commit.js`
+- **config**: `.standard-release/semver.example.js` => `.standard-release/spec.semver.js`
+
 ### ☕ Features
 - changelog release title: `YYYY-MM-DD HH:MM:SS ZZZZZ Release [TAG](URL)`
 - fit to coding-style rules of [changelog](https://codingart.readthedocs.io/en/latest/ChangeLog.html)
@@ -26,19 +32,13 @@
   * `### ☠ Security`
   * `### ☕ Features`
   * `### ⚠ Deprecated`
-  * `### ⛔ Incompatible`
-  * `### ⛨ Fixed`
-  * `### ⚒ Changed`
+  * `### ☣ Incompatible`
+  * `### ☀ Fixed`
+  * `### ⛭ Changed`
   * `### ⚑ Preview`
   * `### ☂ Dependencies`
 
-### ⛔ Incompatible
-- **config**: refactor the config file to make it more clear
-- **config**: new add config file `.standard-release/spec.changelog.js`
-- **config**: `.standard-release/commit.example.js` => `.standard-release/spec.commit.js`
-- **config**: `.standard-release/semver.example.js` => `.standard-release/spec.semver.js`
-
-### ⚒ Changed
+### ⛭ Changed
 - **test**: testing more, bugfix, and more
 - **perf**: remove unused runtime log stuff ([3bffcf8](https://github.com/gkide/standard-release/commit/3bffcf8))
 - **build**: remove unused deps packages ([7aa825d](https://github.com/gkide/standard-release/commit/7aa825d))

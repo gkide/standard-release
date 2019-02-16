@@ -181,6 +181,18 @@ exports.standardRelease = function standardRelease() {
         }
     }
 
+    if(typeof(cmdArgs.changelogTemplate) != 'undefined') {
+        let changelog = 'CHANGELOG.md';
+        if(cmdArgs.changelogTemplate) {
+            changelog = cmdArgs.changelogTemplate;
+        }
+        const keyMsg = helper.colorKeys('green', { [changelog]: true });
+        changelog = config.getChangelog(helper, changelog);
+        if(!tools.getModule('template').insertUnrelease(changelog, helper)) {
+            helper.errorMsg('Insert [Unrelease] to ' + keyMsg + ' error, exit.');
+        }
+    }
+
     if(typeof(cmdArgs.changelog) != 'undefined') {
         if(!tools.getModule('myChangelog').update(helper)) {
             helper.errorMsg('update changelog error, exit.');
