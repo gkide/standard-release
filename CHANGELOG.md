@@ -5,6 +5,45 @@
 - REPOSITORY COMMITS ADHERE TO [CONVENTIONAL COMMITS](https://conventionalcommits.org).
 
 
+## [Unreleased]
+### ☕ Features
+- changelog release title: `YYYY-MM-DD HH:MM:SS ZZZZZ Release [TAG](URL)`
+- fit to coding-style rules of [changelog](https://codingart.readthedocs.io/en/latest/ChangeLog.html)
+- add **skip** header type and fix validate commit testing ([49e2fc0](https://github.com/gkide/standard-release/commit/49e2fc0))
+- add changelog group symbols ([806ad5f](https://github.com/gkide/standard-release/commit/806ad5f))
+- add commit group for changelog ([fb1bf43](https://github.com/gkide/standard-release/commit/fb1bf43))
+
+- init creat template changelog ([6bb2914](https://github.com/gkide/standard-release/commit/6bb2914))
+- init create specimen configuration file ([80ac924](https://github.com/gkide/standard-release/commit/80ac924))
+
+- add args: **--changelog-greed**, keep `[Unreleased]` unknown group
+  * it is true for `standard-release -c` if not set
+  * it is false for `standard-release -c --changelog-release` if not set
+- add args: **--changelog-release**, use `YYYY-MM-DD HH:MM:SS ZZZZZ Release ...`
+  * it is false if not set, then the top title use `[Unreleased]`
+- add args: **--changelog-template**, add `[Unreleased]` template to changelog default is,
+  * `## [Unreleased]`
+  * `### ☠ Security`
+  * `### ☕ Features`
+  * `### ⚠ Deprecated`
+  * `### ⛔ Incompatible`
+  * `### ⛨ Fixed`
+  * `### ⚒ Changed`
+  * `### ⚑ Preview`
+  * `### ☂ Dependencies`
+
+### ⛔ Incompatible
+- **config**: refactor the config file to make it more clear
+- **config**: new add config file `.standard-release/spec.changelog.js`
+- **config**: `.standard-release/commit.example.js` => `.standard-release/spec.commit.js`
+- **config**: `.standard-release/semver.example.js` => `.standard-release/spec.semver.js`
+
+### ⚒ Changed
+- **test**: testing more, bugfix, and more
+- **perf**: remove unused runtime log stuff ([3bffcf8](https://github.com/gkide/standard-release/commit/3bffcf8))
+- **build**: remove unused deps packages ([7aa825d](https://github.com/gkide/standard-release/commit/7aa825d))
+
+
 ## 2019-01-05 22:17:07 +0800 Release [v0.1.3-rc.1](https://github.com/gkide/standard-release/releases/tag/v0.1.3-rc.1)
 ### BugFixes
 - fix: cmd args no default & reasonal & readable, auto creat not error ([47b7128](https://github.com/gkide/standard-release/commit/47b7128))
