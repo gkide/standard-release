@@ -16,7 +16,7 @@ require(path.resolve(__dirname, 'init.js'));
 require(path.resolve(__dirname, 'is-semver.js'));
 
 // Run testing: standard-release -m, default rules
-require(path.resolve(__dirname, 'commit-rules-def.js'));
+require(path.resolve(__dirname, 'commit-def.js'));
 
 // Run testing: standard-release -m, custom rules
-require(path.resolve(__dirname, 'commit-rules-usr.js'));
+require(path.resolve(__dirname, 'commit-usr.js'));
