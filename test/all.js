@@ -3,6 +3,9 @@
 // Native
 const path = require('path');
 
+// Run testing: misc APIs testing
+require(path.resolve(__dirname, 'misc.js'));
+
 // Run testing: git semver tags package
 require(path.resolve(__dirname, 'mygit.js'));
 
