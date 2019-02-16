@@ -83,6 +83,23 @@ const SpecCommitJS = "exports.commitRules = {\n"
     + "    }\n"
     + "}";
 
+const ChangelogTemplate = "# Change Log\n"
+    + "\n"
+    + "- ALL NOTABLE CHANGES WILL BE DOCUMENTED HERE.\n"
+    + "- PROJECT VERSIONS ADHERE TO [SEMANTIC VERSIONING](http://semver.org).\n"
+    + "- REPOSITORY COMMITS ADHERE TO [CONVENTIONAL COMMITS](https://conventionalcommits.org).\n"
+    + "\n"
+    + "\n"
+    + "## [Unreleased]\n"
+    + "### ☕ Features\n"
+    + "### ☠ Security\n"
+    + "### ⛨ Fixed\n"
+    + "### ⚒ Changed\n"
+    + "### ⚑ Preview\n"
+    + "### ⚠ Deprecated\n"
+    + "### ⛔ Incompatible\n"
+    + "### ☂ Dependencies";
+
 function runTesting(standardRelease) {
     // out of the source tree
     const workingDirectory = path.resolve(__dirname, '..', '..');
@@ -142,7 +159,7 @@ function runTesting(standardRelease) {
             chai.expect(ret.stderr).to.empty;
         });
 
-        it('create correct specimen config file', function() {
+        it('create correct specimen config files', function() {
             shell.exec('git init');
             let ret = standardRelease('-i');
             let specFile; let fileData;
@@ -157,6 +174,10 @@ function runTesting(standardRelease) {
             specFile = path.resolve(workingDirectory, 'tmp', '.standard-release', 'spec.semver.js');
             fileData = tools.readFile(specFile);
             chai.expect(SpecSemverJS).to.equal(fileData);
+
+            specFile = path.resolve(workingDirectory, 'tmp', 'CHANGELOG.md');
+            fileData = tools.readFile(specFile);
+            chai.expect(ChangelogTemplate).to.equal(fileData);
 
             chai.expect(ret.code).to.equal(0);
             chai.expect(ret.stdout).to.empty;

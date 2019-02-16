@@ -5,18 +5,7 @@
 - REPOSITORY COMMITS ADHERE TO [CONVENTIONAL COMMITS](https://conventionalcommits.org).
 
 
-## [Unreleased]
-### ☕ Features
-### ☠ Security
-### ⛨ Fixed
-### ⚒ Changed
-### ⚑ Preview
-### ⚠ Deprecated
-### ⛔ Incompatible
-### ☂ Dependencies
-
-
-## 2019-01-05 Release [v0.1.3-rc.1](https://github.com/gkide/standard-release/releases/tag/v0.1.3-rc.1)
+## 2019-01-05 22:17:07 +0800 Release [v0.1.3-rc.1](https://github.com/gkide/standard-release/releases/tag/v0.1.3-rc.1)
 ### BugFixes
 - fix: cmd args no default & reasonal & readable, auto creat not error ([47b7128](https://github.com/gkide/standard-release/commit/47b7128))
 
@@ -71,6 +60,7 @@
 - feature: init command: --init, -i ([e70c0c9](https://github.com/gkide/standard-release/commit/e70c0c9))
 - feature: valid commit message init ([085c053](https://github.com/gkide/standard-release/commit/085c053))
 - feature: init user interface ([fd3ff46](https://github.com/gkide/standard-release/commit/fd3ff46))
+
 ### BugFixes
 - fix: skip signed-off-by for checking footer ([7a640e5](https://github.com/gkide/standard-release/commit/7a640e5))
 - fix: git raw commit data ([18e5684](https://github.com/gkide/standard-release/commit/18e5684))
