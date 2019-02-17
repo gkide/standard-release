@@ -33,8 +33,10 @@
         "testInit": "mocha --timeout=5000 test/init.js",
         "testMygit": "mocha --timeout=5000 test/mygit.js",
         "testIsSemver": "mocha --timeout=5000 test/is-semver.js",
-        "testCommitRuleDef": "mocha --timeout=5000 test/commit-def.js",
-        "testCommitRuleUsr": "mocha --timeout=5000 test/commit-usr.js"
+        "testCommitDef": "mocha --timeout=5000 test/commit-def.js",
+        "testCommitUsr": "mocha --timeout=5000 test/commit-usr.js",
+        "testChangelogDef": "mocha --timeout=5000 test/changelog-def.js",
+        "testChangelogUsr": "mocha --timeout=5000 test/changelog-usr.js"
     },
     "files": [
         "bin/*",

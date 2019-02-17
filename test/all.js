@@ -20,3 +20,9 @@ require(path.resolve(__dirname, 'commit-def.js'));
 
 // Run testing: standard-release -m, custom rules
 require(path.resolve(__dirname, 'commit-usr.js'));
+
+// Run testing: standard-release -c, default rules
+require(path.resolve(__dirname, 'changelog-def.js'));
+
+// Run testing: standard-release -c, custom rules
+require(path.resolve(__dirname, 'changelog-usr.js'));
