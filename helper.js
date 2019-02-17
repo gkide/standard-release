@@ -167,6 +167,13 @@ const helper = new class {
 exports.standardRelease = function standardRelease() {
     const cmdArgs = tools.getModule('cmdParser').argv;
     // console.debug(cmdArgs);
+    // console.log(process.argv);
+
+    if(cmdArgs['_'].length > 0) {
+        console.log(cmdArgs['_']);
+        helper.errorMsg("Unknown arguments as upper shown, exit.");
+        process.exit(1);
+    }
 
     helper.cmdArgs = cmdArgs;
     helper.usrHome = config.getUsrHome();

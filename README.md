@@ -49,6 +49,7 @@ the [Conventional Commits](https://conventionalcommits.org).
 - To insert `[Unrelease]` template to `CHANGELOG.md` or the given file.
 
 `--changelog-from`
+- To set `skip`, `SKIP`, or `Skip` will ignore all raw commit logs.
 - To given the start point of commit logs to get, can be git tag or SHA1.
 
 ## Recommendation
