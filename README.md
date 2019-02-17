@@ -13,18 +13,26 @@
 
 `standard-release -i` will generated **.standard-release** directory.
 
--  Commit message checking rules `commit.js`, affect ``standard-release -m``
-- `commit.example.js` the default rules for commit message style checking.
-- `semver.example.js` the same as ``-X``, ``-Y``, ``-Z``, ``-P`` and ``-B``,
+- Generated `CHANGELOG.md` at the repo root directory with default logs.
+- The `spec.*.js` is the example file, modify & rename to `*.js` for custom config.
+- `spec.changelog.js` the default rules for changelog updating.
+- `spec.commit.js` the default rules for commit message style checking.
+- `spec.semver.js` the same as ``-X``, ``-Y``, ``-Z``, ``-P`` and ``-B``,
    but cmd-line have high priority.
 
-## Generated Changelog
 
-`standard-release -c` will generated change-log if the repo
-commit following the [Conventional Commits]((https://conventionalcommits.org)).
-It also guess the next version shoulb be used base on the git log history
-which begins with the previous release tag if the commit following
-the default settings.
+## Changelog Updating
+
+`standard-release -c` will update change log if the repo commit
+following the [Conventional Commits](https://conventionalcommits.org).
+
+- If no argument, to update `CHANGELOG.md` by default; if has, then update the given file.
+- It will keep all **unknown** groups of `[Unrelease]` if it has.
+- The **unknown** groups can be user config using `changelog.js` and `commit.js`.
+- It will guess the next version shoulb be used base on the git log history.
+- The update changelog start from the previous release tag if has.
+- The update changelog filter base on the setting of `changelog.js` and `commit.js`.
+  * Auto update Changelog [Conventional Commits](https://github.com/gkide/githooks/blob/master/Conventional.md)
 
 ### Conventional Commits
 
