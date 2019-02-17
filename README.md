@@ -33,3 +33,7 @@ following the [Conventional Commits](https://conventionalcommits.org).
 - The update changelog get commit logs start from the previous release tag if has.
 - The update changelog filter base on the setting of `changelog.js` and `commit.js`.
   * Auto update changelog default [Conventional Commits](https://github.com/gkide/githooks/blob/master/Conventional.md) rules.
+
+## Recommendation
+
+It is recommendate to use `standard-release` together with [githooks](https://github.com/gkide/githooks).
