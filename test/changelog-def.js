@@ -20,7 +20,6 @@ function initTmpRepo() {
     config.standardRelease('-i');
     shell.exec('git add .');
     shell.exec('git commit -m "docs: init"');
-    // shell.exec('git remote add origin https://abc.def.com/tmp');
 }
 
 function cleanTmpRepo() {
@@ -186,6 +185,7 @@ function getUserLogs(title, extra) {
 
 // The following take too much time, need to split them
 function runCommitGroup(subject) {
+    // Major
     it('git commit for changelog update: Incompatible', () => {
         // Incompatible
         shell.exec('git commit --allow-empty -m "major: ' + subject + '"');
@@ -198,18 +198,21 @@ function runCommitGroup(subject) {
         // Deprecated
         shell.exec('git commit --allow-empty -m "deprecated(api): ' + subject + '"');
     });
+    // Minor
     it('git commit for changelog update: Features', () => {
         // Features
         shell.exec('git commit --allow-empty -m "feat: ' + subject + '"');
         shell.exec('git commit --allow-empty -m "minor: ' + subject + '"');
         shell.exec('git commit --allow-empty -m "feature: ' + subject + '"');
     });
+    // Patch
     it('git commit for changelog update: Fixed', () => {
         // Fixed
         shell.exec('git commit --allow-empty -m "fix: ' + subject + '"');
         shell.exec('git commit --allow-empty -m "patch: ' + subject + '"');
         shell.exec('git commit --allow-empty -m "bugfix: ' + subject + '"');
     });
+    // Tweak
     it('git commit for changelog update: Changed', () => {
         // Changed
         shell.exec('git commit --allow-empty -m "perf: ' + subject + '"');
@@ -226,6 +229,7 @@ function runCommitGroup(subject) {
         shell.exec('git commit --allow-empty -m "wip: ' + subject + '"');
         shell.exec('git commit --allow-empty -m "preview: ' + subject + '"');
     });
+    // Version Unrelated
     it('git commit for changelog update: skip raw logs(A)', () => {
         // skip raw logs
         shell.exec('git commit --allow-empty -m "ci: ' + subject + '"');
@@ -240,16 +244,20 @@ function runCommitGroup(subject) {
     });
 }
 
+function getPromptMsg(ver, file) {
+    return 'Release Tag should be: ' + ver + '\nUpdated changelog: ' + file + '\n'
+}
+
 function runTesting(standardRelease) {
     describe('standard-release changelog, def rules', () => {
         before(initTmpRepo);
         //after(cleanTmpRepo);
 
-        const I_USERMSG = 'Release Tag should be: v0.0.1\nUpdated changelog: CHANGELOG.md\n';
         const E_TEMPLATE = 'ERROR: Insert [Unrelease] to CHANGELOG.md error, exit.\n';
 
         it('--changelog-template: error for [Unrelease] exits', () => {
-            let ret = standardRelease("-x --changelog-template");
+            chai.expect(tools.readFile('CHANGELOG.md')).to.equal(ChangelogT);
+            let ret = standardRelease("-x -t");
             chai.expect(ret.code).to.equal(1);
             chai.expect(ret.stdout).to.equal("");
             chai.expect(ret.stderr).to.equal(E_TEMPLATE);
@@ -257,7 +265,7 @@ function runTesting(standardRelease) {
 
         it('--changelog-template(A1.md): with CHANGELOG.md deleted', () => {
             shell.exec('rm -f CHANGELOG.md');
-            let ret = standardRelease("--changelog-template");
+            let ret = standardRelease("-t");
             chai.expect(ret.code).to.equal(0);
             chai.expect(ret.stdout).to.empty;
             chai.expect(ret.stderr).to.empty;
@@ -267,7 +275,7 @@ function runTesting(standardRelease) {
 
         it('--changelog-template(A2.md): insert to given changelog file', () => {
             shell.exec('mkdir -p x/y');
-            let ret = standardRelease("--changelog-template=x/y/my.md");
+            let ret = standardRelease("-t=x/y/my.md");
             chai.expect(ret.code).to.equal(0);
             chai.expect(ret.stdout).to.empty;
             chai.expect(ret.stderr).to.empty;
@@ -280,7 +288,7 @@ function runTesting(standardRelease) {
             const usrLogs = getUserLogs(title);
             const beforeLogs = HEADER + usrLogs + oldReleaseLogs;
             tools.writeFile('CHANGELOG.md', beforeLogs);
-            let ret = standardRelease("--changelog-template");
+            let ret = standardRelease("-t");
             chai.expect(ret.code).to.equal(0);
             chai.expect(ret.stdout).to.empty;
             chai.expect(ret.stderr).to.empty;
@@ -293,11 +301,13 @@ function runTesting(standardRelease) {
         let changelog = getRawCommitLogs('## [Unreleased]\n', SUBJECT);
         runCommitGroup(SUBJECT);
 
+        const v001CHANGELOG = getPromptMsg('v0.0.1', 'CHANGELOG.md');
+
         it('--changelog(B1.md): RepoNoRemote: update with template only', () => {
             shell.exec('cp A1.md CHANGELOG.md');
             let ret = standardRelease("-c");
             chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.equal(I_USERMSG);
+            chai.expect(ret.stdout).to.equal(v001CHANGELOG);
             chai.expect(ret.stderr).to.empty;
             chai.expect(tools.readFile('CHANGELOG.md')).to.equal(changelog);
             shell.exec('mv CHANGELOG.md B1.md');
@@ -305,7 +315,7 @@ function runTesting(standardRelease) {
 
         it('--changelog(B2.md): RepoNoRemote: keep all unrelease groups when update', () => {
             shell.exec('rm -f CHANGELOG.md');
-            let ret = standardRelease("-x --changelog-template");
+            let ret = standardRelease("-x -t");
             chai.expect(ret.code).to.equal(0);
             chai.expect(ret.stdout).to.empty;
             chai.expect(ret.stderr).to.empty;
@@ -313,7 +323,7 @@ function runTesting(standardRelease) {
             tools.appendToFile('CHANGELOG.md', '\n\n' + UnknownABC);
             ret = standardRelease("-c");
             chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.equal(I_USERMSG);
+            chai.expect(ret.stdout).to.equal(v001CHANGELOG);
             chai.expect(ret.stderr).to.empty;
             const logs = changelog + '\n\n' + UnknownXYZ + '\n\n' + UnknownABC;
             chai.expect(tools.readFile('CHANGELOG.md')).to.equal(logs);
@@ -324,13 +334,41 @@ function runTesting(standardRelease) {
             shell.exec('rm -rf CHANGELOG.md');
             let ret = standardRelease("-c");
             chai.expect(ret.code).to.equal(0);
-            chai.expect(ret.stdout).to.equal(I_USERMSG);
+            chai.expect(ret.stdout).to.equal(v001CHANGELOG);
             chai.expect(ret.stderr).to.empty;
             chai.expect(tools.readFile('CHANGELOG.md')).to.equal(changelog);
             shell.exec('mv CHANGELOG.md B3.md');
         });
 
-        it('--changelog-release(C1.md): RepoNoRemote: keep all unrelease groups when updating', () => {
+        it('--changelog-release(C1.md): init release with no CHANGELOG.md', () => {
+            shell.exec('rm -f CHANGELOG.md');
+            shell.exec('git remote add origin https://abc.def.com/tmp');
+            let ret = standardRelease("-c -r");
+            chai.expect(ret.code).to.equal(0);
+            chai.expect(ret.stdout).to.equal(v001CHANGELOG);
+            chai.expect(ret.stderr).to.empty;
+            shell.exec('mv CHANGELOG.md C1.md');
+        });
+
+        it('--changelog-release(C2.md): init release with template CHANGELOG.md', () => {
+            shell.exec('cp A1.md CHANGELOG.md');
+            let ret = standardRelease("-c -r");
+            chai.expect(ret.code).to.equal(0);
+            chai.expect(ret.stdout).to.equal(v001CHANGELOG);
+            chai.expect(ret.stderr).to.empty;
+            shell.exec('mv CHANGELOG.md C2.md');
+        });
+
+        it('--changelog-release(C3.md): init release to given file', () => {
+            let ret = standardRelease("-c=x/y/my.md -r");
+            chai.expect(ret.code).to.equal(0);
+            const v001xyzmy = getPromptMsg('v0.0.1', 'x/y/my.md');
+            chai.expect(ret.stdout).to.equal(v001xyzmy);
+            chai.expect(ret.stderr).to.empty;
+            shell.exec('mv x/y/my.md C3.md');
+        });
+
+        it('--changelog-release(C4.md): keep all unrelease when release', () => {
             const extra = UnknownXYZ + '\n\n' + UnknownABC;
             const usrLogs = getUserLogs('## [Unreleased]\n', extra);
             const beforeLogs = HEADER + usrLogs + oldReleaseLogs;
@@ -338,10 +376,81 @@ function runTesting(standardRelease) {
             shell.exec('git add .');
             shell.exec('git commit -m "docs: update changelog"');
 
-            let ret = standardRelease("-c --changelog-release --changelog-greed");
-            //chai.expect(ret.code).to.equal(0);
-            //chai.expect(ret.stdout).to.equal(I_USERMSG);
-            //chai.expect(ret.stderr).to.empty;
+            let ret = standardRelease("-c -r -g");
+            chai.expect(ret.code).to.equal(0);
+            chai.expect(ret.stdout).to.equal(v001CHANGELOG);
+            chai.expect(ret.stderr).to.empty;
+
+            let foundXYZ = false;
+            let foundABC = false;
+            tools.readFile('CHANGELOG.md').split('\n').some(function(line) {
+                if(foundXYZ && foundABC) {
+                    return true; // break
+                }
+                if(line == '### ☘ xyz') {
+                    foundXYZ = true;
+                }
+                if(line == '### ☘ ABC') {
+                    foundABC = true;
+                }
+            });
+            chai.expect(foundXYZ).to.equal(true);
+            chai.expect(foundABC).to.equal(true);
+            shell.exec('mv CHANGELOG.md C4.md');
+        });
+
+        it('--changelog-release(C5.md): release bump tweak to v0.0.1-0', () => {
+            shell.exec('git tag v0.0.0');
+            let ret = standardRelease("-c -r");
+            chai.expect(ret.code).to.equal(0);
+            const v0010CHANGELOG = getPromptMsg('v0.0.1-0', 'CHANGELOG.md');
+            chai.expect(ret.stdout).to.equal(v0010CHANGELOG);
+            chai.expect(ret.stderr).to.empty;
+            shell.exec('mv CHANGELOG.md C5.md');
+        });
+
+        it('--changelog-release(C6.md): release bump tweak to v0.0.1-3', () => {
+            shell.exec('git tag v0.0.1-2');
+            shell.exec('git commit --allow-empty -m "perf: bump tweak"');
+            let ret = standardRelease("-c -r");
+            chai.expect(ret.code).to.equal(0);
+            const v0013CHANGELOG = getPromptMsg('v0.0.1-3', 'CHANGELOG.md');
+            chai.expect(ret.stdout).to.equal(v0013CHANGELOG);
+            chai.expect(ret.stderr).to.empty;
+            shell.exec('mv CHANGELOG.md C6.md');
+        });
+
+        it('--changelog-release(C7.md): release bump patch to v0.0.7', () => {
+            shell.exec('git tag v0.0.6');
+            shell.exec('git commit --allow-empty -m "fix: bump patch"');
+            let ret = standardRelease("-c -r");
+            chai.expect(ret.code).to.equal(0);
+            const v007CHANGELOG = getPromptMsg('v0.0.7', 'CHANGELOG.md');
+            chai.expect(ret.stdout).to.equal(v007CHANGELOG);
+            chai.expect(ret.stderr).to.empty;
+            shell.exec('mv CHANGELOG.md C7.md');
+        });
+
+        it('--changelog-release(C8.md): release bump minor to v0.8.0', () => {
+            shell.exec('git tag v0.7.1');
+            shell.exec('git commit --allow-empty -m "feat: bump minor"');
+            let ret = standardRelease("-c -r");
+            chai.expect(ret.code).to.equal(0);
+            const v080CHANGELOG = getPromptMsg('v0.8.0', 'CHANGELOG.md');
+            chai.expect(ret.stdout).to.equal(v080CHANGELOG);
+            chai.expect(ret.stderr).to.empty;
+            shell.exec('mv CHANGELOG.md C8.md');
+        });
+
+        it('--changelog-release(C9.md): release bump major to v9.0.0', () => {
+            shell.exec('git tag v8.1.0');
+            shell.exec('git commit --allow-empty -m "break: bump major"');
+            let ret = standardRelease("-c -r");
+            chai.expect(ret.code).to.equal(0);
+            const v900CHANGELOG = getPromptMsg('v9.0.0', 'CHANGELOG.md');
+            chai.expect(ret.stdout).to.equal(v900CHANGELOG);
+            chai.expect(ret.stderr).to.empty;
+            shell.exec('mv CHANGELOG.md C9.md');
         });
     });
 }
