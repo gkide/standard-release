@@ -23,16 +23,33 @@
 
 ## Changelog Updating
 
-`standard-release -c` will update change log if the repo commit
-following the [Conventional Commits](https://conventionalcommits.org).
+- The changelog style following the [rules](https://codingart.readthedocs.io/en/latest/ChangeLog.html).
+- An example of changelog file following this is [HERE](https://github.com/gkide/coding-style/blob/master/data/CHANGELOG.md).
 
+`--changelog` will update change log if the repo commit following
+the [Conventional Commits](https://conventionalcommits.org).
 - If no argument, updating `CHANGELOG.md`, else updating the given file.
 - It will keep all **unknown** groups of `[Unrelease]` if it has.
 - The **unknown** groups can be user config using `changelog.js` and `commit.js`.
-- It will guess the next version shoulb be used base on the git log history.
-- The update changelog get commit logs start from the previous release tag if has.
-- The update changelog filter base on the setting of `changelog.js` and `commit.js`.
-  * Auto update changelog default [Conventional Commits](https://github.com/gkide/githooks/blob/master/Conventional.md) rules.
+- It will guess the next version shoulb be used base on the git commit history.
+- To update changelog from commit logs start from the previous tag by default.
+  * The start point can be config by using `--changelog-from`.
+- To update changelog filter logs base on the setting of `changelog.js` and `commit.js`.
+  * Update changelog default [Conventional Commits](https://github.com/gkide/githooks/blob/master/Conventional.md)
+    history logs filting rules.
+
+`--changelog-release`
+- To replace `## [Unreleased]` to `## 2019-01-05 22:17:07 +0800 Release ...`
+- By default all **unknown** groups of `[Unrelease]` will be removed if not set `--changelog-greed`.
+
+`--changelog-greed`
+- To make sure keep all **unknown** groups of `[Unrelease]`.
+
+`--changelog-template`
+- To insert `[Unrelease]` template to `CHANGELOG.md` or the given file.
+
+`--changelog-from`
+- To given the start point of commit logs to get, can be git tag or SHA1.
 
 ## Recommendation
 
