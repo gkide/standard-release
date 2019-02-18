@@ -201,7 +201,7 @@ function getPromptMsg(ver, file) {
 function runTesting(standardRelease) {
     describe('standard-release changelog, usr rules', () => {
         before(initTmpRepo);
-        //after(cleanTmpRepo);
+        after(cleanTmpRepo);
 
         const E_TEMPLATE = 'ERROR: Insert [Unrelease] to CHANGELOG.md error, exit.\n';
 
