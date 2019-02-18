@@ -251,7 +251,7 @@ function getPromptMsg(ver, file) {
 function runTesting(standardRelease) {
     describe('standard-release changelog, def rules', () => {
         before(initTmpRepo);
-        //after(cleanTmpRepo);
+        after(cleanTmpRepo);
 
         const E_TEMPLATE = 'ERROR: Insert [Unrelease] to CHANGELOG.md error, exit.\n';
 
@@ -458,8 +458,8 @@ function runTesting(standardRelease) {
             shell.exec('rm CHANGELOG.md');
             let ret = standardRelease("-c -r -f v0.0.6");
             chai.expect(ret.code).to.equal(0);
-            const v9010CHANGELOG = getPromptMsg('v9.0.1-0', 'CHANGELOG.md');
-            chai.expect(ret.stdout).to.equal(v9010CHANGELOG);
+            const v1000CHANGELOG = getPromptMsg('v10.0.0', 'CHANGELOG.md');
+            chai.expect(ret.stdout).to.equal(v1000CHANGELOG);
             chai.expect(ret.stderr).to.empty;
             shell.exec('mv CHANGELOG.md D1.md');
         });
