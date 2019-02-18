@@ -406,7 +406,7 @@ function runTesting(standardRelease) {
             const v0010CHANGELOG = getPromptMsg('v0.0.1-0', 'CHANGELOG.md');
             chai.expect(ret.stdout).to.equal(v0010CHANGELOG);
             chai.expect(ret.stderr).to.empty;
-            shell.exec('mv CHANGELOG.md C5.md');
+            shell.exec('cp CHANGELOG.md C5.md');
         });
 
         it('--changelog-release(C6.md): release bump tweak to v0.0.1-3', () => {
@@ -417,7 +417,7 @@ function runTesting(standardRelease) {
             const v0013CHANGELOG = getPromptMsg('v0.0.1-3', 'CHANGELOG.md');
             chai.expect(ret.stdout).to.equal(v0013CHANGELOG);
             chai.expect(ret.stderr).to.empty;
-            shell.exec('mv CHANGELOG.md C6.md');
+            shell.exec('cp CHANGELOG.md C6.md');
         });
 
         it('--changelog-release(C7.md): release bump patch to v0.0.7', () => {
@@ -428,7 +428,7 @@ function runTesting(standardRelease) {
             const v007CHANGELOG = getPromptMsg('v0.0.7', 'CHANGELOG.md');
             chai.expect(ret.stdout).to.equal(v007CHANGELOG);
             chai.expect(ret.stderr).to.empty;
-            shell.exec('mv CHANGELOG.md C7.md');
+            shell.exec('cp CHANGELOG.md C7.md');
         });
 
         it('--changelog-release(C8.md): release bump minor to v0.8.0', () => {
@@ -439,7 +439,7 @@ function runTesting(standardRelease) {
             const v080CHANGELOG = getPromptMsg('v0.8.0', 'CHANGELOG.md');
             chai.expect(ret.stdout).to.equal(v080CHANGELOG);
             chai.expect(ret.stderr).to.empty;
-            shell.exec('mv CHANGELOG.md C8.md');
+            shell.exec('cp CHANGELOG.md C8.md');
         });
 
         it('--changelog-release(C9.md): release bump major to v9.0.0', () => {
@@ -450,7 +450,18 @@ function runTesting(standardRelease) {
             const v900CHANGELOG = getPromptMsg('v9.0.0', 'CHANGELOG.md');
             chai.expect(ret.stdout).to.equal(v900CHANGELOG);
             chai.expect(ret.stderr).to.empty;
-            shell.exec('mv CHANGELOG.md C9.md');
+            shell.exec('cp CHANGELOG.md C9.md');
+        });
+
+        it('--changelog-from(D1.md): release from given version', () => {
+            shell.exec('git tag v9.0.0');
+            shell.exec('rm CHANGELOG.md');
+            let ret = standardRelease("-c -r -f v0.0.6");
+            chai.expect(ret.code).to.equal(0);
+            const v9010CHANGELOG = getPromptMsg('v9.0.1-0', 'CHANGELOG.md');
+            chai.expect(ret.stdout).to.equal(v9010CHANGELOG);
+            chai.expect(ret.stderr).to.empty;
+            shell.exec('mv CHANGELOG.md D1.md');
         });
     });
 }
