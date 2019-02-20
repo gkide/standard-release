@@ -675,32 +675,30 @@ function runTesting(standardRelease) {
             const commitMsg = 'invalid: invalid type';
             let ret = standardRelease('-m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
-            const stderrMsg = "ERROR: 'invalid' not valid types of: "
-                + 'major, break, breaking, security, deprecated, '
-                + 'minor, feat, feature, '
-                + 'fix, patch, bugfix, '
-                + 'perf, revert, refactor, '
-                + 'build, deps, '
-                + 'wip, preview, '
-                + 'ci, docs, test, style, chore\n';
-            chai.expect(ret.stdout).to.empty;
+            const stdoutMsg = 'Major Types: major, break, breaking, security, deprecated\n'
+                + 'Minor Types: minor, feat, feature\n'
+                + 'Patch Types: fix, patch, bugfix\n'
+                + 'Tweak Types: perf, revert, refactor, wip, preview\n'
+                + 'NLogs Types: build, deps, ci, docs, test, style, chore, skip\n';
+            const stderrMsg = "ERROR: invalid is not one of the above valid commit types.\n";
+            chai.expect(ret.stdout).to.equal(stdoutMsg);
             chai.expect(ret.stderr).to.equal(stderrMsg);
 
             ret = standardRelease('-x -m "' + commitMsg + '"');
             chai.expect(ret.code).to.equal(1);
-            chai.expect(ret.stdout).to.empty;
+            chai.expect(ret.stdout).to.equal(stdoutMsg);
             chai.expect(ret.stderr).to.equal(stderrMsg);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
-            chai.expect(ret.stdout).to.empty;
+            chai.expect(ret.stdout).to.equal(stdoutMsg);
             chai.expect(ret.stderr).to.equal(stderrMsg);
 
             writeCommitMsgToFile(commitMsg);
             ret = standardRelease('-x -m ' + commitMsgFile);
             chai.expect(ret.code).to.equal(1);
-            chai.expect(ret.stdout).to.empty;
+            chai.expect(ret.stdout).to.equal(stdoutMsg);
             chai.expect(ret.stderr).to.equal(stderrMsg);
         });
 
