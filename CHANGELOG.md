@@ -5,13 +5,21 @@
 - REPOSITORY COMMITS ADHERE TO [CONVENTIONAL COMMITS](https://conventionalcommits.org).
 
 
-## [Unreleased]
+## 2019-02-20 22:47:24 +0800 Release [v0.2.0](https://github.com/gkide/standard-release/releases/tag/v0.2.0)
+
+[[☣](#<span id = "v_Incompatible_201902202247240800"></span>)]
+[[☕](#<span id = "v_Features_201902202247240800"></span>)]
+[[⛭](#<span id = "v_Changed_201902202247240800"></span>)]
+comparing with [v0.1.3-rc.1](https://github.com/gkide/standard-release/compare/v0.1.3-rc.1...v0.2.0)
+
+<span id = "v_Incompatible_201902202247240800"></span>
 ### ☣ Incompatible
 - **config**: refactor the config file to make it more clear
 - **config**: new add config file `.standard-release/spec.changelog.js`
 - **config**: `.standard-release/commit.example.js` => `.standard-release/spec.commit.js`
 - **config**: `.standard-release/semver.example.js` => `.standard-release/spec.semver.js`
 
+<span id = "v_Features_201902202247240800"></span>
 ### ☕ Features
 - changelog release title: `YYYY-MM-DD HH:MM:SS ZZZZZ Release [TAG](URL)`
 - fit to coding-style rules of [changelog](https://codingart.readthedocs.io/en/latest/ChangeLog.html)
@@ -22,6 +30,9 @@
 - init creat template changelog ([6bb2914](https://github.com/gkide/standard-release/commit/6bb2914))
 - init create specimen configuration file ([80ac924](https://github.com/gkide/standard-release/commit/80ac924))
 
+- add args: **--changelog-from**, to set start point for raw logs
+  * if not set, then to use the pervious tag by default
+  * it can be set to tag or SHA1, set to SKIP or skip to skip all raw logs.
 - add args: **--changelog-greed**, keep `[Unreleased]` unknown group
   * it is true for `standard-release -c` if not set
   * it is false for `standard-release -c --changelog-release` if not set
@@ -38,6 +49,7 @@
   * `### ⚑ Preview`
   * `### ☂ Dependencies`
 
+<span id = "v_Changed_201902202247240800"></span>
 ### ⛭ Changed
 - **test**: testing more, bugfix, and more
 - **perf**: remove unused runtime log stuff ([3bffcf8](https://github.com/gkide/standard-release/commit/3bffcf8))
