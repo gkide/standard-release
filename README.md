@@ -35,7 +35,7 @@ the [Conventional Commits](https://conventionalcommits.org).
 - To update changelog from commit logs start from the previous tag by default.
   * The start point can be config by using `--changelog-from`.
 - To update changelog filter logs base on the setting of `changelog.js` and `commit.js`.
-  * Update changelog default [Conventional Commits](https://github.com/gkide/githooks/blob/master/Conventional.md)
+  * Update changelog default [Conventional Commits](https://github.com/gkide/repo-hooks/blob/master/Conventional.md)
     history logs filting rules.
 
 `--changelog-release`
@@ -54,4 +54,4 @@ the [Conventional Commits](https://conventionalcommits.org).
 
 ## Recommendation
 
-It is recommendate to use `standard-release` together with [githooks](https://github.com/gkide/githooks).
+It is recommendate to use `standard-release` together with [githooks](https://github.com/gkide/repo-hooks).
