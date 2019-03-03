@@ -11,6 +11,7 @@ const shell = require('shelljs');
 // Utilities
 const config = require(path.resolve(__dirname, 'config.js'));
 const tools = require(path.resolve(__dirname, '..', 'lib', 'tools'));
+const myGit = require(path.resolve(__dirname, '..', 'lib', 'myGit'));
 
 function initTmpRepo() {
     shell.rm('-rf', 'tmp');
@@ -61,8 +62,15 @@ const UnknownTODO = '### ☎ TODO\n'
     + '- TODO: this is unknown group for unrelease\n'
     + '- TODO: here can be put the todo list data';
 
+let prevTopHashId = "";
+function getPrevTopHashId() {
+    let prevTopHash = myGit.repoHeadHash();
+    return '<span id = "PrevTopHash=' + prevTopHash + '"></span>\n';
+}
+
 function getRawCommitLogs(title, subject) {
     const data = HEADER
+    + prevTopHashId
     + title
     + '\n'
     + '### ☠ Security\n'
@@ -248,6 +256,8 @@ function getPromptMsg(ver, file) {
     return 'Release Tag should be: ' + ver + '\nUpdated changelog: ' + file + '\n'
 }
 
+let SUBJECT = 'feature';
+let CHANGELOG_B = "";
 function runTesting(standardRelease) {
     describe('standard-release changelog, def rules', () => {
         before(initTmpRepo);
@@ -297,19 +307,19 @@ function runTesting(standardRelease) {
             shell.exec('mv CHANGELOG.md A3.md');
         });
 
-        let SUBJECT = 'feature';
-        let changelog = getRawCommitLogs('## [Unreleased]\n', SUBJECT);
         runCommitGroup(SUBJECT);
 
         const v001CHANGELOG = getPromptMsg('v0.0.1', 'CHANGELOG.md');
 
         it('--changelog(B1.md): RepoNoRemote: update with template only', () => {
+            prevTopHashId = getPrevTopHashId();
+            CHANGELOG_B = getRawCommitLogs('## [Unreleased]\n', SUBJECT);
             shell.exec('cp A1.md CHANGELOG.md');
             let ret = standardRelease("-c");
             chai.expect(ret.code).to.equal(0);
             chai.expect(ret.stdout).to.equal(v001CHANGELOG);
             chai.expect(ret.stderr).to.empty;
-            chai.expect(tools.readFile('CHANGELOG.md')).to.equal(changelog);
+            chai.expect(tools.readFile('CHANGELOG.md')).to.equal(CHANGELOG_B);
             shell.exec('mv CHANGELOG.md B1.md');
         });
 
@@ -325,7 +335,7 @@ function runTesting(standardRelease) {
             chai.expect(ret.code).to.equal(0);
             chai.expect(ret.stdout).to.equal(v001CHANGELOG);
             chai.expect(ret.stderr).to.empty;
-            const logs = changelog + '\n\n' + UnknownXYZ + '\n\n' + UnknownABC;
+            const logs = CHANGELOG_B + '\n\n' + UnknownXYZ + '\n\n' + UnknownABC;
             chai.expect(tools.readFile('CHANGELOG.md')).to.equal(logs);
             shell.exec('mv CHANGELOG.md B2.md');
         });
@@ -336,7 +346,7 @@ function runTesting(standardRelease) {
             chai.expect(ret.code).to.equal(0);
             chai.expect(ret.stdout).to.equal(v001CHANGELOG);
             chai.expect(ret.stderr).to.empty;
-            chai.expect(tools.readFile('CHANGELOG.md')).to.equal(changelog);
+            chai.expect(tools.readFile('CHANGELOG.md')).to.equal(CHANGELOG_B);
             shell.exec('mv CHANGELOG.md B3.md');
         });
 

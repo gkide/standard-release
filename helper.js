@@ -206,12 +206,6 @@ exports.standardRelease = function standardRelease() {
         }
     }
 
-    if(cmdArgs.release) {
-        if(!tools.getModule('doRelease').doRelease(helper)) {
-            helper.errorMsg('first release error, exit.');
-        }
-    }
-
     if(cmdArgs.isSemver) {
         if(!tools.getModule('mySemVer').isValidSemver(cmdArgs.isSemver)) {
             const msg = helper.colorKeys('blue', { [cmdArgs.isSemver]:true });

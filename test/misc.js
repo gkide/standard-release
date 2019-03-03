@@ -93,7 +93,7 @@ function runTesting() {
             chai.expect(A).to.equal(DD);
 
             A = tools.getTimestamp("dD");
-            chai.expect(A).to.equal(D + "");
+            chai.expect(A).to.equal(DD + "");
             A = tools.getTimestamp("Dd");
             chai.expect(A).to.equal(DD);
         });
