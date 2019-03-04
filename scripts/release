@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+IS_REPO_HOOKS=false;
+REPO_HOOKS=$(git config core.hookspath);
+SYNC_RELEASE=${REPO_HOOKS}/scripts/sync-release;
+if [ "$REPO_HOOKS" != "" -a -f ${SYNC_RELEASE} ]; then
+    KEY=$(grep REPO_HOOKS_VERSION ${SYNC_RELEASE} | head -1 | awk -F'=' '{ print $1; }');
+    if [ "$KEY" = "REPO_HOOKS_VERSION" ]; then
+        IS_REPO_HOOKS=true;
+    fi
+fi
+
+if ! $IS_REPO_HOOKS; then
+    echo "GIT hooks path is not repo-hooks, https://github.com/gkide/repo-hooks"
+    exit 1;
+fi
+
+REPO_DIR=$(git rev-parse --show-toplevel);
+${SYNC_RELEASE} CONFIG=${REPO_DIR}/scripts/.sync-repo-info.sh;
