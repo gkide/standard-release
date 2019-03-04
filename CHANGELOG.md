@@ -5,6 +5,20 @@
 - REPOSITORY COMMITS ADHERE TO [CONVENTIONAL COMMITS](https://conventionalcommits.org).
 
 
+## 2019-03-05 04:14:58 +0800 Release [v0.2.1](https://github.com/gkide/standard-release/releases/tag/v0.2.1)
+
+[[☕](#<span id = "v_Features_201903050414580800"></span>)]
+[[☀](#<span id = "v_Fixed_201903050414580800"></span>)]
+comparing with [v0.2.0](https://github.com/gkide/standard-release/compare/v0.2.0...v0.2.1)
+
+<span id = "v_Features_201903050414580800"></span>
+### ☕ Features
+- **feat**: auto add git repo hash when update changelog for UNRELEASE ([df8c12e](https://github.com/gkide/standard-release/commit/df8c12e))
+
+<span id = "v_Fixed_201903050414580800"></span>
+### ☀ Fixed
+- **fix**: release use tag if it has previous semver tag ([63614d6](https://github.com/gkide/standard-release/commit/63614d6))
+
 ## 2019-02-20 22:47:24 +0800 Release [v0.2.0](https://github.com/gkide/standard-release/releases/tag/v0.2.0)
 
 [[☣](#<span id = "v_Incompatible_201902202247240800"></span>)]
