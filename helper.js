@@ -214,6 +214,16 @@ exports.standardRelease = function standardRelease() {
         }
     }
 
+    if(typeof(cmdArgs.newestTag) != 'undefined') {
+        let repoTag = "NO-TAGS-FOUND"
+        if(cmdArgs.newestTag) { // true for newest repo tag
+            repoTag=tools.getModule('myGit').getLatestTagSync('v')
+        } else {
+            repoTag=tools.getModule('myGit').getEarliestTagSync('v')
+        }
+        helper.infoMsg(repoTag, true);
+    }
+
     //console.log("standard-release %s", chalk.green('OK'));
     process.exit(0);
 }
