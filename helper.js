@@ -221,6 +221,11 @@ exports.standardRelease = function standardRelease() {
         } else {
             repoTag=tools.getModule('myGit').getEarliestTagSync('v')
         }
+
+        if(!repoTag) {
+            repoTag = "NO-TAGS-FOUND"
+        }
+
         helper.infoMsg(repoTag, true);
     }
 
