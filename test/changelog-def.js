@@ -65,7 +65,7 @@ const UnknownTODO = '### ☎ TODO\n'
 let prevTopHashId = "";
 function getPrevTopHashId() {
     let prevTopHash = myGit.repoHeadHash();
-    return '<span id = "PrevTopHash=' + prevTopHash + '"></span>\n';
+    return '<span id = "PrevTopHash=' + prevTopHash + '_major"></span>\n';
 }
 
 function getRawCommitLogs(title, subject) {
