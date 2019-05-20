@@ -7,8 +7,8 @@
 
 ## 2019-03-05 04:14:58 +0800 Release [v0.2.1](https://github.com/gkide/standard-release/releases/tag/v0.2.1)
 
-[[☕](#<span id = "v_Features_201903050414580800"></span>)]
-[[☀](#<span id = "v_Fixed_201903050414580800"></span>)]
+[[☕](#v_Features_201903050414580800)]
+[[☀](#v_Fixed_201903050414580800)]
 comparing with [v0.2.0](https://github.com/gkide/standard-release/compare/v0.2.0...v0.2.1)
 
 <span id = "v_Features_201903050414580800"></span>
@@ -21,9 +21,9 @@ comparing with [v0.2.0](https://github.com/gkide/standard-release/compare/v0.2.0
 
 ## 2019-02-20 22:47:24 +0800 Release [v0.2.0](https://github.com/gkide/standard-release/releases/tag/v0.2.0)
 
-[[☣](#<span id = "v_Incompatible_201902202247240800"></span>)]
-[[☕](#<span id = "v_Features_201902202247240800"></span>)]
-[[⛭](#<span id = "v_Changed_201902202247240800"></span>)]
+[[☣](#v_Incompatible_201902202247240800)]
+[[☕](#v_Features_201902202247240800)]
+[[⛭](#v_Changed_201902202247240800)]
 comparing with [v0.1.3-rc.1](https://github.com/gkide/standard-release/compare/v0.1.3-rc.1...v0.2.0)
 
 <span id = "v_Incompatible_201902202247240800"></span>
