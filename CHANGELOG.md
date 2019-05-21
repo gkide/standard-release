@@ -5,6 +5,21 @@
 - REPOSITORY COMMITS ADHERE TO [CONVENTIONAL COMMITS](https://conventionalcommits.org).
 
 
+## 2019-05-21 19:06:08 +0800 Release [v0.2.2](https://github.com/gkide/standard-release/releases/tag/v0.2.2)
+
+[[☕](#v_Features_201905211906080800)]
+[[☀](#v_Fixed_201905211906080800)]
+comparing with [v0.2.1](https://github.com/gkide/standard-release/compare/v0.2.1...v0.2.2)
+
+<span id = "v_Features_201905211906080800"></span>
+### ☕ Features
+- **feat**: new args for getting newest/earliest semver-tag ([9f768a3](https://github.com/gkide/standard-release/commit/9f768a3))
+
+<span id = "v_Fixed_201905211906080800"></span>
+### ☀ Fixed
+- **fix**: release quick nav links for mark down ([2c53505](https://github.com/gkide/standard-release/commit/2c53505))
+- **fix**: return 'NO-TAGS-FOUND' when do not found semver tags ([3ae1f93](https://github.com/gkide/standard-release/commit/3ae1f93))
+
 ## 2019-03-05 04:14:58 +0800 Release [v0.2.1](https://github.com/gkide/standard-release/releases/tag/v0.2.1)
 
 [[☕](#v_Features_201903050414580800)]
