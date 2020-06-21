@@ -57,6 +57,7 @@ the [Conventional Commits](https://conventionalcommits.org).
 - `$ npm link .` for local dev
 - `$ npm test` or `$ npm run test` run all tests.
 - `$ npm run xxx` run **xxx** test, see [package.json](package.json) **scripts** filed for details.
+- [package.json](package.json) [specification](// http://caibaojian.com/npm/files/package.json.html)
 
 ## Recommendation
 

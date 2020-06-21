@@ -3,26 +3,26 @@
 // Native
 const path = require('path');
 
-// Run testing: misc APIs testing
+// misc APIs testing
 require(path.resolve(__dirname, 'misc.js'));
 
-// Run testing: git semver tags package
+// git semver tags testing
 require(path.resolve(__dirname, 'mygit.js'));
 
-// Run testing: standard-release -i
+// --init
 require(path.resolve(__dirname, 'init.js'));
 
-// Run testing: standard-release --is-semver
+// --is-semver
 require(path.resolve(__dirname, 'is-semver.js'));
 
-// Run testing: standard-release -m, default rules
+// --message, default commit message rules
 require(path.resolve(__dirname, 'commit-def.js'));
 
-// Run testing: standard-release -m, custom rules
+// --message, custom commit message rules
 require(path.resolve(__dirname, 'commit-usr.js'));
 
-// Run testing: standard-release -c, default rules
+// --changelog, default changelog rules
 require(path.resolve(__dirname, 'changelog-def.js'));
 
-// Run testing: standard-release -c, custom rules
+// --changelog, custom changelog rules
 require(path.resolve(__dirname, 'changelog-usr.js'));

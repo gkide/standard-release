@@ -1,7 +1,7 @@
 # Local stuff
 *.log*
 /logs/
-/.release/*
+/.standard-release/
 
 # NodeJS & npm
 package-lock.json

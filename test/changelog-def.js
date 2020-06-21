@@ -259,7 +259,7 @@ function getPromptMsg(ver, file) {
 let SUBJECT = 'feature';
 let CHANGELOG_B = "";
 function runTesting(standardRelease) {
-  describe('standard-release changelog, def rules', () => {
+  describe('standard-release changelog with default rules', () => {
     before(initTmpRepo);
     after(cleanTmpRepo);
 

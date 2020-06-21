@@ -13,7 +13,7 @@ const config = require(path.resolve(__dirname, 'config.js'));
 
 function runTesting(standardRelease) {
   const workingDirectory = path.resolve(__dirname, '..', 'tmp');
-  describe('standard-release --message, default rules', function() {
+  describe('standard-release --message with default commit message rules', function() {
     before(function() {
       shell.rm('-rf', 'tmp');
       shell.mkdir('tmp');

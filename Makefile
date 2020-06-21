@@ -33,4 +33,8 @@ PHONY += publish
 publish: release
 	@npm publish
 
+PHONY += test
+test:
+	@npm run test
+
 .PHONY: $(PHONY)
