@@ -1,62 +1,62 @@
 {
-    "name": "@gkide/standard-release",
-    "version": "v0.2.2",
-    "license": "GPL-3.0-or-later",
-    "description": "Conventional commit, version and changelog.",
-    "keywords": [
-        "conventional-commit",
-        "conventional-version",
-        "conventional-changelog"
-    ],
-    "bugs": {
-        "url": "https://github.com/gkide/standard-release/issues"
-    },
-    "author": {
-        "name": "charlie-wong",
-        "email": "charlie-wong@foxmail.com"
-    },
-    "main": "",
-    "bin": {
-        "standard-release": "bin/cli.js"
-    },
-    "config": {
-        "config": ".standard-release"
-    },
-    "homepage": "https://github.com/gkide/standard-release#readme",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/gkide/standard-release.git"
-    },
-    "scripts": {
-        "test": "mocha --timeout=5000 test/all.js",
-        "testMisc": "mocha --timeout=5000 test/misc.js",
-        "testInit": "mocha --timeout=5000 test/init.js",
-        "testMygit": "mocha --timeout=5000 test/mygit.js",
-        "testIsSemver": "mocha --timeout=5000 test/is-semver.js",
-        "testCommitDef": "mocha --timeout=5000 test/commit-def.js",
-        "testCommitUsr": "mocha --timeout=5000 test/commit-usr.js",
-        "testChangelogDef": "mocha --timeout=5000 test/changelog-def.js",
-        "testChangelogUsr": "mocha --timeout=5000 test/changelog-usr.js"
-    },
-    "files": [
-        "bin/*",
-        "lib/*",
-        "test/*",
-        "CHANGELOG.md",
-        "helper.js",
-        "LICENSE",
-        "package.json",
-        "README.md"
-    ],
-    "dependencies": {
-        "chalk": "^2.4.1",
-        "semver": "^5.6.0",
-        "semver-diff": "^2.1.0",
-        "shelljs": "^0.8.3",
-        "yargs": "^12.0.2"
-    },
-    "devDependencies": {
-        "chai": "^4.2.0",
-        "mocha": "^5.2.0"
-    }
+  "name": "@gkide/standard-release",
+  "version": "v0.2.2",
+  "license": "GPL-3.0-or-later",
+  "description": "Conventional commit, version and changelog.",
+  "keywords": [
+    "conventional-commit",
+    "conventional-version",
+    "conventional-changelog"
+  ],
+  "bugs": {
+    "url": "https://github.com/gkide/standard-release/issues"
+  },
+  "author": {
+    "name": "charlie-wong",
+    "email": "charlie-wong@foxmail.com"
+  },
+  "main": "",
+  "bin": {
+    "standard-release": "bin/cli.js"
+  },
+  "config": {
+    "config": ".standard-release"
+  },
+  "homepage": "https://github.com/gkide/standard-release#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gkide/standard-release.git"
+  },
+  "scripts": {
+    "test": "mocha --timeout=5000 test/all.js",
+    "test-misc": "mocha --timeout=5000 test/misc.js",
+    "test-init": "mocha --timeout=5000 test/init.js",
+    "test-mygit": "mocha --timeout=5000 test/mygit.js",
+    "test-is-semver": "mocha --timeout=5000 test/is-semver.js",
+    "test-commit-def": "mocha --timeout=5000 test/commit-def.js",
+    "test-commit-usr": "mocha --timeout=5000 test/commit-usr.js",
+    "test-changelog-def": "mocha --timeout=5000 test/changelog-def.js",
+    "test-changelog-usr": "mocha --timeout=5000 test/changelog-usr.js"
+  },
+  "files": [
+    "bin/*",
+    "lib/*",
+    "test/*",
+    "CHANGELOG.md",
+    "helper.js",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "semver": "^5.6.0",
+    "semver-diff": "^2.1.0",
+    "shelljs": "^0.8.3",
+    "yargs": "^12.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
+  }
 }

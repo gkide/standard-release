@@ -9,7 +9,7 @@
 ![open-issues](https://img.shields.io/github/issues/gkide/standard-release.svg)
 ![open-pull-requests](https://img.shields.io/github/issues-pr/gkide/standard-release.svg)
 
-## Init and Config
+## Init
 
 `standard-release -i` will generated **.standard-release** directory.
 
@@ -51,6 +51,12 @@ the [Conventional Commits](https://conventionalcommits.org).
 `--changelog-from`
 - To set `skip`, `SKIP`, or `Skip` will ignore all raw commit logs.
 - To given the start point of commit logs to get, can be git tag or SHA1.
+
+## Dev & Testing
+
+- `$ npm link .` for local dev
+- `$ npm test` or `$ npm run test` run all tests.
+- `$ npm run xxx` run **xxx** test, see [package.json](package.json) **scripts** filed for details.
 
 ## Recommendation
 

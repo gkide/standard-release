@@ -12,10 +12,10 @@ hasColons = $(call hasSpaces,$(subst :, ,$1))
 SOURCE_DIR := $(CURDIR)
 
 ifeq ($(call hasSpaces,$(SOURCE_DIR)),1)
-    $(error Project path can NOT contain spaces: "$(SOURCE_DIR)")
+  $(error Project path can NOT contain spaces: "$(SOURCE_DIR)")
 endif
 ifeq ($(call hasColons,$(SOURCE_DIR)),1)
-    $(error Project path can NOT contain colons: "$(SOURCE_DIR)")
+  $(error Project path can NOT contain colons: "$(SOURCE_DIR)")
 endif
 
 # Do not print "Entering directory ..."

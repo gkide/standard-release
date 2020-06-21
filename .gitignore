@@ -1,19 +1,20 @@
-# Logs & local debug
-logs/
+# Local stuff
 *.log*
-.standard-release/*
+/logs/
+/.release/*
 
 # NodeJS & npm
 package-lock.json
 
 # Dependency directories
-node_modules/
-jspm_packages/
+/node_modules/
+/jspm_packages/
 
 # Compiled binary addons
 # https://nodejs.org/api/addons.html
-build/Release
+/build/Release
 
-tmp/
-todo/
-coverage/
+/tmp/
+/wip/
+/todo/
+/coverage/
