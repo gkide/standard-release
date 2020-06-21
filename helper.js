@@ -166,8 +166,8 @@ const helper = new class {
 
 exports.standardRelease = function standardRelease() {
   const cmdArgs = tools.getModule('cmdParser').argv;
-  // console.debug(cmdArgs);
-  // console.log(process.argv);
+  //console.debug(cmdArgs);
+  //console.log(process.argv);
 
   if(cmdArgs['_'].length > 0) {
     console.log(cmdArgs['_']);
