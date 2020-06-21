@@ -5,6 +5,15 @@
 - REPOSITORY COMMITS ADHERE TO [CONVENTIONAL COMMITS](https://conventionalcommits.org).
 
 
+## 2020-06-21 22:18:01 +0800 Release [v0.2.3](https://github.com/gkide/standard-release/releases/tag/v0.2.3)
+
+[[☀](#v_Fixed_202006212218010800)]
+comparing with [v0.2.2](https://github.com/gkide/standard-release/compare/v0.2.2...v0.2.3)
+
+<span id = "v_Fixed_202006212218010800"></span>
+### ☀ Fixed
+- **fix**: do not install test/* for npm install ([82815b0](https://github.com/gkide/standard-release/commit/82815b0))
+
 ## 2019-05-21 19:06:08 +0800 Release [v0.2.2](https://github.com/gkide/standard-release/releases/tag/v0.2.2)
 
 [[☕](#v_Features_201905211906080800)]
