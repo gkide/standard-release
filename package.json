@@ -41,7 +41,6 @@
   "files": [
     "bin/*",
     "lib/*",
-    "test/*",
     "CHANGELOG.md",
     "helper.js",
     "LICENSE",

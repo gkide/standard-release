@@ -31,7 +31,7 @@ release:
 
 PHONY += publish
 publish: release
-	@npm publish
+	@npm publish --access public
 
 PHONY += test
 test:
