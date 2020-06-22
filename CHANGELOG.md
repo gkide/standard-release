@@ -5,6 +5,22 @@
 - REPOSITORY COMMITS ADHERE TO [CONVENTIONAL COMMITS](https://conventionalcommits.org).
 
 
+## 2020-06-22 Release [v0.3.0](https://github.com/gkide/standard-release/releases/tag/v0.3.0)
+
+[[☕](#v_Features_202006222209060800)]
+[[☂](#v_Dependencies_202006222209060800)]
+comparing with [v0.2.3](https://github.com/gkide/standard-release/compare/v0.2.3...v0.3.0)
+
+<span id = "v_Features_202006222209060800"></span>
+### ☕ Features
+- **feature**: --changelog-timestamp use YYYY-MM-DD format ([83fdef8](https://github.com/gkide/standard-release/commit/83fdef8))
+- **feature**: commit/changelog working with commit message footer ([85c990d](https://github.com/gkide/standard-release/commit/85c990d))
+- **feature**: add option --changelog-timestamp ([42667dc](https://github.com/gkide/standard-release/commit/42667dc))
+
+<span id = "v_Dependencies_202006222209060800"></span>
+### ☂ Dependencies
+- **deps**: update deps npm package ([11329e5](https://github.com/gkide/standard-release/commit/11329e5))
+
 ## 2020-06-21 22:18:01 +0800 Release [v0.2.3](https://github.com/gkide/standard-release/releases/tag/v0.2.3)
 
 [[☀](#v_Fixed_202006212218010800)]

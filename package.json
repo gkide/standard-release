@@ -1,6 +1,6 @@
 {
   "name": "@gkide/standard-release",
-  "version": "v0.2.3",
+  "version": "v0.3.0",
   "license": "GPL-3.0-or-later",
   "description": "Conventional commit, version and changelog.",
   "keywords": [
