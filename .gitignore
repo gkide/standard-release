@@ -3,9 +3,6 @@
 /logs/
 /.standard-release/
 
-# NodeJS & npm
-package-lock.json
-
 # Dependency directories
 /node_modules/
 /jspm_packages/
